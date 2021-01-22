@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Component
+@Component //to chyba zbędne bo Service jest automatycznie rozpoznawane jako component prawda?
 public class UserService {
     private final UserRepository userRepository;
 
@@ -29,7 +29,8 @@ public class UserService {
         else {
             User user = new User();
             user.setEmail(userDto.getEmail());
-            user.setUsername(userDto.getUserName());
+            user.setFirstName(userDto.getFirstName());
+            user.setLastName(userDto.getLastName());
             user.setPassword(userDto.getPassword());
             user.setEnabled(true); //później jeśli chcemy weryfikację to admin i trenerzy dadzą true a domyslnie będzie false
             return user;

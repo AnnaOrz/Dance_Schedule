@@ -11,8 +11,10 @@
 
 <form:form method="post" modelAttribute="user" >
 
-    UserName: <form:input path="userName" /> <br />
-    <form:errors path="userName" /> <br/>
+    FirstName: <form:input path="firstName" /> <br />
+    <form:errors path="firstName" /> <br/>
+    UserName: <form:input path="lastName" /> <br />
+    <form:errors path="lastName" /> <br/>
     Email: <form:input path="email" /> <br />
     <form:errors path="email" /> <br/>
     Password: <form:input path="password" /> <br/>

@@ -4,7 +4,6 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
@@ -19,17 +18,14 @@ public class User {
     @NotNull
     private boolean enabled;
 
-    @NotBlank
+    @Column(nullable = false, unique = true)
     @Email
     private String email;
 
-    @ManyToMany
-    private Set< Role > roles;
-
-    @NotBlank
-    private String username;
+    private String role;
 
     private String password;
+
     @Transient //żeby nie było można zrobić persist na tym
     private String passwordConfirm;
 
@@ -38,6 +34,9 @@ public class User {
 
     @ManyToMany
     private List<Lesson> classesParticipating;
+
+    private String firstName;
+    private String lastName;
 
     public List<Lesson> getClassesParticipating() {
         return classesParticipating;
@@ -89,20 +88,12 @@ public class User {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
+    public String getRole() {
+        return role;
     }
 
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRoles(String role) {
+        this.role = role;
     }
 
     public String getPasswordConfirm() {
@@ -113,4 +104,19 @@ public class User {
         this.passwordConfirm = passwordConfirm;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 }

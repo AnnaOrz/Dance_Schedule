@@ -5,7 +5,6 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -14,26 +13,37 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
+    private MyAuthenticationProvider authProvider;
 
-    public SecurityConfiguration(DataSource dataSource) {
+
+    public SecurityConfiguration(DataSource dataSource, MyAuthenticationProvider authProvider) {
         this.dataSource = dataSource;
+        this.authProvider = authProvider;
     }
+
+
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-        auth.inMemoryAuthentication()
+/*        auth.inMemoryAuthentication()
                 .withUser("aaa")
                 .password("123")
                 .roles("USER")
                 .and()
                 .withUser("Anna")
                 .password("123")
-                .roles("ADMIN");
-        /*auth.jdbcAuthentication().dataSource(dataSource);*/
+                .roles("ADMIN");*/
+        auth.jdbcAuthentication().dataSource(dataSource)
+                .authoritiesByUsernameQuery("select email, role from users where email=?")
+                .usersByUsernameQuery("select email, password, enabled from users where email=?");
+
+
+        /*auth.authenticationProvider(authProvider);*/
 
     }
 /*    @Bean
-    public BCryptPasswordEncoder getPasswordEncoder(){
+    public PasswordEncoder getPasswordEncoder(){
       return  new BCryptPasswordEncoder();
     }*/
 
@@ -43,14 +53,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/dance").hasAnyRole("USER" , "ADMIN" , "TRAINER")
-                .antMatchers("/admin").hasRole("ADMIN")
+                .antMatchers("/admin").hasRole("ADMIN") //czy ja tu mam dawać całą ścieżkę?
                 .and().formLogin();
 
     }
+
+
 }

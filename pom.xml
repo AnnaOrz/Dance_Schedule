@@ -13,7 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>Dance_Schedule</name>
-    <description>Web app for dance/sport schools to organise classes and sign up</description>
+    <description>Web app for dance/sport schools to organize classes and sign up</description>
 
     <properties>
         <java.version>11</java.version>
