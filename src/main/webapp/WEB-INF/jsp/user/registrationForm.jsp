@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<%@ include file="fragments/sideMenu.jsp" %>
+<%@ include file="../fragments/sideMenu.jsp" %>
 
 <form:form method="post" modelAttribute="user" >
 

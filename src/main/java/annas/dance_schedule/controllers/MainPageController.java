@@ -21,8 +21,8 @@ import javax.validation.Valid;
 @Controller
 @RequestMapping("/")
 public class MainPageController {
-    private UserService userService;
-    private UserRepository userRepository;
+    private final UserService userService;
+    private final UserRepository userRepository;
 
     public MainPageController(UserService userService, UserRepository userRepository) {
         this.userService = userService;
@@ -38,12 +38,12 @@ public class MainPageController {
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
         model.addAttribute("user", new UserDto());
-        return "/registrationForm";
+        return "user/registrationForm";
     }
     @PostMapping("/registration")
     public String registerNewUser(@ModelAttribute @Valid UserDto userDto, BindingResult result) throws UserAlreadyExistException {
         if (result.hasErrors()) {
-            return "/registrationForm";
+            return "user/registrationForm";
         } else {
             User user = userService.registerNewUserAccount(userDto);
             userRepository.save(user);

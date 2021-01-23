@@ -55,6 +55,7 @@ public class CarnetController {
         if (result.hasErrors()) {
             return result.getAllErrors().toString();
         } else {
+            carnetType.setDescription(carnetType.getDescription() + " cena: " + carnetType.getPrice() + " ilość wejść: " + carnetType.getEntrances() );
 
             carnetTypeRepository.save(carnetType);
             return "zapisałem nowy typ karnetu";
@@ -72,6 +73,13 @@ public class CarnetController {
     @PostMapping("/buy")
     @ResponseBody
     public String buyCarnet(@ModelAttribute Carnet carnet ) {
+        if(carnet.getStartDate() == null){
+            return "podaj datę rozpoczęcia karnetu";
+        }
+        if(carnet.getStartDate().isBefore(LocalDate.now())){
+            return "data rozpoczęcia nie może być z przeszłości";
+        }
+
         String userName = "12@wp.pl";
         if(userRepository.findByEmail(userName).isEmpty()){
             return "nie znalazłem aktywnego użytkownika";
