@@ -16,17 +16,18 @@
 <body>
 
 <form:form method="post" modelAttribute="carnet" >
-    <div>Uwaga to jest form dla admina do tworzenia karnetów!
-    Docelowo ten form nie musi mieć daty rozpoczęcia i zakończenia</div>
+    <div>To jest form dla admina do tworzenia typów karnetów</div>
 
-    Entrances: <form:input path="entrances" /> <br />
+    Wejścia: <form:input path="entrances" /> <br />
     <form:errors path="entrances" /> <br/>
-    accessNumber: <form:input path="accessNumber" /> <br />
+    Poziom cenowy: <form:input path="accessNumber" /> <br />
     <form:errors path="accessNumber" /> <br/>
-    price: <form:input path="price" /> <br />
+    Cena: <form:input path="price" /> <br />
+    <form:errors path="price" /> <br/>
+    Opis: <form:input path="description" /> <br />
     <form:errors path="price" /> <br/>
     <input type="submit" value="save" />
-    <form:hidden path="id" value="${carnet.id}"/>
+    <form:hidden path="id" value="${carnet.id}"/> <%--będzie ważne do edycji--%>
 
 </form:form>
 </body>

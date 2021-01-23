@@ -14,7 +14,7 @@ import java.util.Optional;
 public class MyUserDetailsService implements UserDetailsService {
 
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public MyUserDetailsService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -29,5 +29,6 @@ public class MyUserDetailsService implements UserDetailsService {
             return new MyUserPrincipal(user.get());
         }
     }
+
 
 }

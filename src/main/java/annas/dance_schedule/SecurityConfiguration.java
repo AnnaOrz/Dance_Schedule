@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/dance").hasAnyRole("USER" , "ADMIN" , "TRAINER")
+                .antMatchers("/dance/**").hasAnyAuthority("USER" , "ADMIN" , "TRAINER")
                 .antMatchers("/admin").hasRole("ADMIN") //czy ja tu mam dawać całą ścieżkę?
                 .and().formLogin();
 

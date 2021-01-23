@@ -7,21 +7,20 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+
 <html>
 <head>
     <title>Wybierz karnet</title>
 </head>
 <body>
-Entrances: <form:input path="entrances" /> <br />
-<form:errors path="entrances" /> <br/>
-startDate: <form:input type="date" path="startDate" /> <br />
+<form:form method="post" modelAttribute="carnet" >
+Data rozpoczęcia: <form:input type="date" path="startDate" /> <br />
 <form:errors path="startDate" /> <br/>
-accessNumber: <form:input path="accessNumber" /> <br />
-<form:errors path="accessNumber" /> <br/>
-price: <form:input path="price" /> <br />
-<form:errors path="price" /> <br/>
+Typ karnetu: <form:select path="carnetType.id" items="${allCarnetTypes}" itemLabel="description" itemValue="id"/> <br />
+    <%--//carnetType to obiekt a daję samo id..--%>
+
 <input type="submit" value="save" />
 
-
+</form:form>
 </body>
 </html>

@@ -1,12 +1,10 @@
 package annas.dance_schedule.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
+
 
 @Entity
 @Table(name = "users")
@@ -26,7 +24,7 @@ public class User {
 
     private String password;
 
-    @Transient //żeby nie było można zrobić persist na tym
+    @Transient //żeby nie było można zrobić persist na tym, ale czy to jest mi w ogóle niezbędne?
     private String passwordConfirm;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -118,5 +116,9 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public void addCarnet(Carnet carnet) {
+        carnets.add(carnet);
     }
 }

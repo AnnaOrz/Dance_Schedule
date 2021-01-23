@@ -4,6 +4,7 @@ import annas.dance_schedule.exceptions.UserAlreadyExistException;
 import annas.dance_schedule.model.User;
 import annas.dance_schedule.model.UserDto;
 import annas.dance_schedule.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,7 +19,7 @@ public class UserService {
     }
 
     @Transactional
-    public User registerNewUserAccount(UserDto userDto)
+    public User registerNewUserAccount(UserDto userDto) //nie mogę tego zmienić na private jak jest transactional, używam domyślnego proxy
             throws UserAlreadyExistException {
 
         if (emailExist(userDto.getEmail())) {
@@ -41,3 +42,5 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 }
+
+

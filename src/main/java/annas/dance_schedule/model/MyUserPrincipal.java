@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+
 public class MyUserPrincipal implements UserDetails {
     private User user;
 
@@ -16,7 +17,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<GrantedAuthority> authorities = new ArrayList<>(); // jak to porządnie zrobić?
         return authorities;
     }
 
@@ -27,7 +28,7 @@ public class MyUserPrincipal implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getEmail();
+        return user.getEmail() + "hakuna matata";
     }
 
     @Override
@@ -48,5 +49,13 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public boolean isEnabled() {
         return user.isEnabled();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -4,6 +4,7 @@ package annas.dance_schedule.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -18,19 +19,31 @@ public class Carnet {
 
     @NotNull
     private Integer entrances;
+
+    @NotNull
     private BigDecimal price;
+
     @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @ManyToOne //karnet może mieć tylko jeden typ
+    private CarnetType carnetType;
+
+    @NotNull (message = "Wybierz datę startu karnetu")
+    @DateTimeFormat(pattern = "yyyy-MM-dd") //bez tego nie działa z formularzem dobrze
+    @FutureOrPresent (message = "nie możesz wybrać daty z przeszłości")
     private LocalDate startDate;
-    /*@NotNull*/
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
+    @FutureOrPresent
     private LocalDate expireDate;
     // przy utworzeniu karnetu automatycznie ustawiana na startDate + 30dni
+
     @NotNull
     private Integer accessNumber;
     // zajęcia z poziomu 1 najtańsze, zajęcia z poziomu 2 droższe. Mając 2 można wejść też na 1 ale nie odwrotnie
-    @ManyToOne
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @NotNull (message = "karnet musi by przypisany do użytkownika")
     private User user;
     //jeden użytkownik może mieć wiele karnetów ale każdy karnet ma tylko jednego użytkownika
 
@@ -89,6 +102,14 @@ public class Carnet {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public CarnetType getCarnetType() {
+        return carnetType;
+    }
+
+    public void setCarnetType(CarnetType carnetType) {
+        this.carnetType = carnetType;
     }
 }
 

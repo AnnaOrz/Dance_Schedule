@@ -37,6 +37,7 @@ public class Lesson {
 
     @ManyToOne
     private User trainer;
+    //zakładam że można utworzyć zajęcia bez trenera i wybrać go później.
 
     public Long getId() {
         return id;

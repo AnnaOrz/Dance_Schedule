@@ -1,14 +1,12 @@
 package annas.dance_schedule.model;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.time.LocalDate;
+
 
 @Entity
 public class CarnetType {
@@ -19,10 +17,13 @@ public class CarnetType {
 
         @NotNull
         private Integer entrances;
+        @NotNull
         private BigDecimal price;
-
         @NotNull
         private Integer accessNumber;
+
+        @NotNull
+        private String description;
 
         public Long getId() {
                 return id;
@@ -54,5 +55,13 @@ public class CarnetType {
 
         public void setAccessNumber(Integer accessNumber) {
                 this.accessNumber = accessNumber;
+        }
+
+        public String getDescription() {
+                return description;
+        }
+
+        public void setDescription(String description) {
+                this.description = description;
         }
 }
