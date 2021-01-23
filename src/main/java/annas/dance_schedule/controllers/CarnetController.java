@@ -7,6 +7,7 @@ import annas.dance_schedule.model.User;
 import annas.dance_schedule.repository.CarnetRepository;
 import annas.dance_schedule.repository.CarnetTypeRepository;
 import annas.dance_schedule.repository.UserRepository;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -42,25 +43,7 @@ public class CarnetController {
 
     }
 
-    @GetMapping("/add")
-    public String createForm(Model model) {
-        model.addAttribute("carnet", new CarnetType());
-        return "carnet/add";
 
-    }
-
-    @ResponseBody
-    @PostMapping("/add")
-    public String createCarnet(@ModelAttribute @Valid CarnetType carnetType, BindingResult result) {
-        if (result.hasErrors()) {
-            return result.getAllErrors().toString();
-        } else {
-            carnetType.setDescription(carnetType.getDescription() + " cena: " + carnetType.getPrice() + " ilość wejść: " + carnetType.getEntrances() );
-
-            carnetTypeRepository.save(carnetType);
-            return "zapisałem nowy typ karnetu";
-        }
-    }
 
     @GetMapping("/buy")
     public String buyForm(Model model) {
@@ -79,8 +62,9 @@ public class CarnetController {
         if(carnet.getStartDate().isBefore(LocalDate.now())){
             return "data rozpoczęcia nie może być z przeszłości";
         }
+        UserDetails current = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-        String userName = "12@wp.pl";
+        String userName = current.getUsername();
         if(userRepository.findByEmail(userName).isEmpty()){
             return "nie znalazłem aktywnego użytkownika";
         }
@@ -93,7 +77,7 @@ public class CarnetController {
         carnet.setExpireDate(carnet.getStartDate().plusDays(30));
 
         carnetRepository.save(carnet);
-        currentUser.addCarnet(carnet);
+     /*   currentUser.addCarnet(carnet);*/ //nie bo cascadeType mam na User i Carnet
         return "dodałem nowy karnet użytkownika";
 
     }

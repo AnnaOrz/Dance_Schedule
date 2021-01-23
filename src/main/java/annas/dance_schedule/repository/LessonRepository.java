@@ -1,4 +1,7 @@
 package annas.dance_schedule.repository;
 
-public interface LessonRepository {
+import annas.dance_schedule.model.Lesson;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface LessonRepository extends JpaRepository<Lesson, Long> {
 }

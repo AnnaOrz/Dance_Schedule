@@ -13,12 +13,10 @@ import javax.sql.DataSource;
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
-    private MyAuthenticationProvider authProvider;
 
 
-    public SecurityConfiguration(DataSource dataSource, MyAuthenticationProvider authProvider) {
+    public SecurityConfiguration(DataSource dataSource) {
         this.dataSource = dataSource;
-        this.authProvider = authProvider;
     }
 
 
@@ -26,20 +24,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception{
-/*        auth.inMemoryAuthentication()
-                .withUser("aaa")
-                .password("123")
-                .roles("USER")
-                .and()
-                .withUser("Anna")
-                .password("123")
-                .roles("ADMIN");*/
         auth.jdbcAuthentication().dataSource(dataSource)
                 .authoritiesByUsernameQuery("select email, role from users where email=?")
                 .usersByUsernameQuery("select email, password, enabled from users where email=?");
 
-
-        /*auth.authenticationProvider(authProvider);*/
 
     }
 /*    @Bean
@@ -58,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
                 .antMatchers("/dance/**").hasAnyAuthority("USER" , "ADMIN" , "TRAINER")
-                .antMatchers("/admin").hasRole("ADMIN") //czy ja tu mam dawać całą ścieżkę?
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin();
 
     }

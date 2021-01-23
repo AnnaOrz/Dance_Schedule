@@ -1,3 +1,4 @@
+/*
 package annas.dance_schedule;
 
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 
 @Component
 public class MyAuthenticationProvider implements AuthenticationProvider {
-
+//mamy te dwie metody które muszę napisać ale nie wiem jeszcze co dać do środka..
     @Override
     public Authentication authenticate(Authentication authentication)
             throws AuthenticationException {
@@ -20,8 +21,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
 
         if (true) {
             //co tu wstawić jako funkcję??
-            // use the credentials
-            // and authenticate against the third-party system
+
             return new UsernamePasswordAuthenticationToken(
                     name, password, new ArrayList<>());
         } else {
@@ -34,3 +34,4 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 }
+*/
