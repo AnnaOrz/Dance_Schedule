@@ -47,11 +47,18 @@ private final LessonRepository lessonRepository;
     @ModelAttribute("allLessons")
     public List<Lesson> allLessons() {return lessonRepository.findAll();}
 
+    @RequestMapping("")
+    public String goToAdminMenu(){
+        return "/admin/menu";
+    }
+
+    @RequestMapping("/CarnetTypes")
+    public String goToCarnetTypes() {return "/admin/allCarnetTypes";}
+
     @GetMapping("/addCarnetType")
     public String createForm(Model model) {
         model.addAttribute("carnet", new CarnetType());
         return "carnet/add";
-
     }
 
     @PostMapping("/addCarnetType")

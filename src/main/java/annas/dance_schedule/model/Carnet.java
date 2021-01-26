@@ -23,9 +23,6 @@ public class Carnet {
     @NotNull
     private BigDecimal price;
 
-    @NotNull
-    @ManyToOne //karnet może mieć tylko jeden typ
-    private CarnetType carnetType;
 
     @NotNull (message = "Wybierz datę startu karnetu")
     @DateTimeFormat(pattern = "yyyy-MM-dd") //bez tego nie działa z formularzem dobrze
@@ -104,12 +101,5 @@ public class Carnet {
         this.user = user;
     }
 
-    public CarnetType getCarnetType() {
-        return carnetType;
-    }
-
-    public void setCarnetType(CarnetType carnetType) {
-        this.carnetType = carnetType;
-    }
 }
 

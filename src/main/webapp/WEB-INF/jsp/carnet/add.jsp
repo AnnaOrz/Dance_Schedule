@@ -28,6 +28,7 @@
     <form:errors path="price" /> <br/>
     <input type="submit" value="save" />
     <form:hidden path="id" value="${carnet.id}"/> <%--będzie ważne do edycji--%>
+    <form:hidden path="available" value="true"/>
 
 </form:form>
 </body>

@@ -21,9 +21,13 @@ public class CarnetType {
         private BigDecimal price;
         @NotNull
         private Integer accessNumber;
+        //if accessNumber of carnetType is higher or equal accesNumber of class - it allow to sign in to this class
 
         @NotNull
         private String description;
+        @NotNull
+        boolean isAvailable;
+        //only carnetTypes with :true will be available to buy by users
 
         public Long getId() {
                 return id;
@@ -63,5 +67,13 @@ public class CarnetType {
 
         public void setDescription(String description) {
                 this.description = description;
+        }
+
+        public boolean isAvailable() {
+                return isAvailable;
+        }
+
+        public void setAvailable(boolean available) {
+                isAvailable = available;
         }
 }

@@ -4,6 +4,11 @@
 <sec:authentication var="principal" property="principal" />
 <sec:authorize access="isAuthenticated()">
     ${principal.username}  </sec:authorize>
+<sec:authorize access="hasAuthority('ADMIN')">
+    <a class="nav-link" href="<c:url value="/dance/admin/"/>">
+    <span>Idź do menu Admina</span>
+    </a>
+</sec:authorize>
 
 <html>
 <head>

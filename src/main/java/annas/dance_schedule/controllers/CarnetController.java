@@ -1,9 +1,6 @@
 package annas.dance_schedule.controllers;
 
-import annas.dance_schedule.model.Carnet;
-import annas.dance_schedule.model.CarnetType;
-import annas.dance_schedule.model.MyUserPrincipal;
-import annas.dance_schedule.model.User;
+import annas.dance_schedule.model.*;
 import annas.dance_schedule.repository.CarnetRepository;
 import annas.dance_schedule.repository.CarnetTypeRepository;
 import annas.dance_schedule.repository.UserRepository;
@@ -34,6 +31,9 @@ public class CarnetController {
         return carnetTypeRepository.findAll();
     }
 
+    @ModelAttribute("allAvailableCarnetTypes")
+    public List<CarnetType> allAvailableCarnetTypes() {return carnetTypeRepository.findAllAvailable();}
+
 
     public CarnetController(CarnetRepository carnetRepository, CarnetTypeRepository carnetTypeRepository, UserRepository userRepository) {
         this.carnetRepository = carnetRepository;
@@ -48,20 +48,17 @@ public class CarnetController {
     @GetMapping("/buy")
     public String buyForm(Model model) {
 
-        model.addAttribute("carnet", new Carnet());
+        model.addAttribute("carnetDto", new CarnetDto());
 
         return "carnet/buy";
     }
 
     @PostMapping("/buy")
-    @ResponseBody
-    public String buyCarnet(@ModelAttribute Carnet carnet ) {
-        if(carnet.getStartDate() == null){
-            return "podaj datę rozpoczęcia karnetu";
+    public String buyCarnet(@ModelAttribute @Valid CarnetDto carnetDto , BindingResult result) {
+        if (result.hasErrors()) {
+            return "carnet/buy";
         }
-        if(carnet.getStartDate().isBefore(LocalDate.now())){
-            return "data rozpoczęcia nie może być z przeszłości";
-        }
+
         UserDetails current = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userName = current.getUsername();
@@ -69,16 +66,18 @@ public class CarnetController {
             return "nie znalazłem aktywnego użytkownika";
         }
         User currentUser = userRepository.findByEmail(userName).get();
-        CarnetType carnetType = carnetTypeRepository.getOne(carnet.getCarnetType().getId());
+
+        Carnet carnet = new Carnet();
+
+        CarnetType carnetType = carnetTypeRepository.getOne(carnetDto.getCarnetTypeId());
         carnet.setUser(currentUser);
         carnet.setAccessNumber(carnetType.getAccessNumber());
         carnet.setEntrances(carnetType.getEntrances());
         carnet.setPrice(carnetType.getPrice());
-        carnet.setExpireDate(carnet.getStartDate().plusDays(30));
+        carnet.setExpireDate(carnetDto.getStartDate().plusDays(30));
 
         carnetRepository.save(carnet);
-     /*   currentUser.addCarnet(carnet);*/ //nie bo cascadeType mam na User i Carnet
-        return "dodałem nowy karnet użytkownika";
+        return "user/main";
 
     }
 
