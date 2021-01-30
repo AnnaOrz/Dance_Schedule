@@ -2,8 +2,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <sec:authentication var="principal" property="principal" />
-<sec:authorize access="isAuthenticated()">
-    ${principal.username}  </sec:authorize>
+
 <sec:authorize access="hasAuthority('ADMIN')">
     <a class="nav-link" href="<c:url value="/dance/admin/"/>">
     <span>Idź do menu Admina</span>
@@ -15,14 +14,25 @@
     <title>DanceSchedule</title>
 </head>
 <body>
-<div>Lets Rock!</div>
-<%@ include file="fragments/sideMenu.jsp" %>
-<%--tu chcę mieć imię widoczne dla zalogowanych--%>
+<sec:authorize access="isAuthenticated()">
+    <div> Zalogowany jako${principal.username} </div>    </sec:authorize>
 
-<a class="nav-link" href="<c:url value="/dance/carnets/buy"/>">
+<%@ include file="fragments/sideMenu.jsp" %>
+
+<sec:authorize access="isAuthenticated()">
+
+<a class="nav-link" href="<c:url value="/dance/user/buy"/>">
     <span>Kup karnet</span>
 </a>
 <br/>
+<a class="nav-link" href="<c:url value="/dance/user/carnets"/>">
+    <span>Moje karnety</span>
+</a> <br/>
+
+<a class="nav-link" href="<c:url value="/dance/user/classes"/>">
+    <span>Moje zajęcia</span>
+</a> <br/>
+</sec:authorize>
 
 </body>
 </html>

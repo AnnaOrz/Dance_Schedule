@@ -4,6 +4,7 @@ package annas.dance_schedule.controllers;
 import annas.dance_schedule.exceptions.UserAlreadyExistException;
 import annas.dance_schedule.model.User;
 import annas.dance_schedule.model.UserDto;
+import annas.dance_schedule.repository.LessonRepository;
 import annas.dance_schedule.repository.UserRepository;
 import annas.dance_schedule.services.UserService;
 import org.springframework.stereotype.Controller;
@@ -23,10 +24,12 @@ import javax.validation.Valid;
 public class MainPageController {
     private final UserService userService;
     private final UserRepository userRepository;
+    private final LessonRepository lessonRepository;
 
-    public MainPageController(UserService userService, UserRepository userRepository) {
+    public MainPageController(UserService userService, UserRepository userRepository, LessonRepository lessonRepository) {
         this.userService = userService;
         this.userRepository = userRepository;
+        this.lessonRepository = lessonRepository;
     }
 
     @RequestMapping("")
@@ -47,11 +50,12 @@ public class MainPageController {
         } else {
             User user = userService.registerNewUserAccount(userDto);
             userRepository.save(user);
-            return "dodałem nowego użytkownika";
+            return "mainPage";
         }
     }
     @RequestMapping("/schedule")
-    public String goToSchedule(){
+    public String goToSchedule(Model model){
+        model.addAttribute("classes", lessonRepository.findAll());
         return "/schedule";
     }
     @RequestMapping("/contact")

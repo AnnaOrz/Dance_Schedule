@@ -25,7 +25,7 @@
     Cena: <form:input path="price" /> <br />
     <form:errors path="price" /> <br/>
     Opis: <form:input path="description" /> <br />
-    <form:errors path="price" /> <br/>
+    <form:errors path="description" /> <br/>
     <input type="submit" value="save" />
     <form:hidden path="id" value="${carnet.id}"/> <%--będzie ważne do edycji--%>
     <form:hidden path="available" value="true"/>

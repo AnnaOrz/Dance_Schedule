@@ -1,11 +1,13 @@
 package annas.dance_schedule.model;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 
 
@@ -18,16 +20,20 @@ public class Lesson {
 
     @NotBlank
     private String name;
-    @Range(min= 0 , max = 20)
+    /*@Range(min= 0 , max = 20)*/
+    @NotNull
     private Integer slots;
 
     private String place;
     @NotNull
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime beginTime;
+    @NotNull
     private String state;
-    //state could be: active, cancelled, started
+    //state could be: active, cancelled, starting
+    @NotNull
     private String level;
-    //Basic, Intermediate, Advanced
+    //Basic, Intermediate, Advanced, Open
     @NotNull
     private Integer accessNumber;
 
@@ -71,11 +77,11 @@ public class Lesson {
         this.place = place;
     }
 
-    public LocalDateTime getBeginTime() {
+    public LocalDateTime  getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(LocalDateTime beginTime) {
+    public void setBeginTime(LocalDateTime  beginTime) {
         this.beginTime = beginTime;
     }
 

@@ -17,7 +17,7 @@
     <form:errors path="lastName" /> <br/>
     Email: <form:input path="email" /> <br />
     <form:errors path="email" /> <br/>
-    Password: <form:input path="password" /> <br/>
+    Password: <form:input path="password" type="password" /> <br/>
     <form:errors path="password" /> <br/>
     <input type="submit" value="save" />
 

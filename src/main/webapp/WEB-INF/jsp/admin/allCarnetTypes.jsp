@@ -9,9 +9,9 @@
 <a href='<c:url value="/dance/admin/addCarnetType"/>'> Dodaj nowy karnet</a>
 <c:forEach items="${allCarnetTypes}" var="carnetType">
     <h3> ${carnetType.description}
-    <a href='<c:url value="/dance/admin/deleteCarnetType/${carnetType.id}"/>'
+    <a href='<c:url value="/dance/admin/carnetTypes/delete/${carnetType.id}"/>'  <%--czy rzeczywiście chcę je usuwać?--%>
     onclick="return confirm('Czy na pewno chcesz usunąć typ karnetów?')">Usuń</a>
-    <a href='<c:url value="/dance/admin/edit/${carnetType.id}"/>'>Edytuj</a>
+    <a href='<c:url value="/dance/admin/carnetTypes/edit/${carnetType.id}"/>'>Edytuj</a>
     </h3>
 </c:forEach>
 ${message}

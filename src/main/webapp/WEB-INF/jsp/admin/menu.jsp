@@ -6,23 +6,27 @@
 
 </head>
 <body>
-<a class="nav-link" href="<c:url value="/dance/admin/Users"/>">
+<ul>
+    <li>
+<a class="nav-link" href="<c:url value="/dance/admin/users"/>">
     <span>Użytkownicy</span>
-</a> <br/>
-
-<a class="nav-link" href="<c:url value="/dance/admin/Carnets"/>">
+</a> </li>
+    <li>
+<a class="nav-link" href="<c:url value="/dance/admin/carnets"/>">
     <span>Karnety użytkowników</span>
 </a> <br/>
-
-<a class="nav-link" href="<c:url value="/dance/admin/CarnetTypes"/>">
+    <li>
+<a class="nav-link" href="<c:url value="/dance/admin/carnetTypes"/>">
     <span>Typy karnetów</span>
-</a> <br/>
-<a class="nav-link" href="<c:url value="xxxxxxx"/>">
+</a> </li>
+    <li>
+<a class="nav-link" href="<c:url value="/dance/admin/lessons"/>">
     <span>Zajęcia</span>
-</a> <br/>
-<a class="nav-link" href="<c:url value="xxxxxxx"/>">
+</a> </li>
+    <li>
+<a class="nav-link" href="<c:url value="/schedule"/>">
     <span>Grafik</span>
-</a> <br/>
-
+</a> </li>
+</ul>
 </body>
 </html>
