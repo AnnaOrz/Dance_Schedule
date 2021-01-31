@@ -12,10 +12,11 @@
 <html>
 <head>
     <title>DanceSchedule</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <sec:authorize access="isAuthenticated()">
-    <div> Zalogowany jako${principal.username} </div>    </sec:authorize>
+    <div> Zalogowany jako ${principal.username} </div>    </sec:authorize>
 
 <%@ include file="fragments/sideMenu.jsp" %>
 

@@ -7,6 +7,8 @@ import annas.dance_schedule.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
     private final UserRepository userRepository;
@@ -38,7 +40,25 @@ public class UserService {
         return userRepository.findByEmail(email).isPresent();
     }
 
-
+    @Transactional
+    public void update(User user) {
+        Optional<User> oldUser = userRepository.findById(user.getId());
+        if (oldUser.isPresent()) {
+            userRepository.updateUser(
+                    user.getEmail(),
+                    user.getRole(),
+                    user.isEnabled(),
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getPassword(),
+                    user.getId());
+        } else userRepository.save(user);
+    }
+    public void activateUser(User user){
+        user.setRoles("User");
+        user.setEnabled(true);
+        update(user);
+    }
 }
 
 

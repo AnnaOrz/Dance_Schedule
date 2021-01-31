@@ -12,5 +12,6 @@
 </head>
 <body>
 <%@ include file="fragments/sideMenu.jsp" %>
+${message.toString()}
 </body>
 </html>

@@ -1,5 +1,7 @@
 package annas.dance_schedule.model;
 
+import org.hibernate.sql.Update;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -30,7 +32,7 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private List<Carnet> carnets;
 
-    @ManyToMany
+    @ManyToMany (cascade = CascadeType.ALL)
     private List<Lesson> classesParticipating;
 
     private String firstName;

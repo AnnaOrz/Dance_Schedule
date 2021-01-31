@@ -5,20 +5,21 @@ import annas.dance_schedule.repository.CarnetRepository;
 import annas.dance_schedule.repository.CarnetTypeRepository;
 import annas.dance_schedule.repository.LessonRepository;
 import annas.dance_schedule.repository.UserRepository;
-import annas.dance_schedule.services.UserService;
+import annas.dance_schedule.services.CarnetService;
+import annas.dance_schedule.services.LessonService;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping(path = "/dance/user")
@@ -27,6 +28,8 @@ public class UserController {
     private final LessonRepository lessonRepository;
     private final CarnetTypeRepository carnetTypeRepository;
     private final UserRepository userRepository;
+    private final LessonService lessonService;
+    private final CarnetService carnetService;
 
     public User getCurrentUser() {
         UserDetails current = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -39,11 +42,13 @@ public class UserController {
 
     }
 
-    public UserController(CarnetRepository carnetRepository, LessonRepository lessonRepository, CarnetTypeRepository carnetTypeRepository, UserRepository userRepository) {
+    public UserController(CarnetRepository carnetRepository, LessonRepository lessonRepository, CarnetTypeRepository carnetTypeRepository, UserRepository userRepository, LessonService lessonService, CarnetService carnetService) {
         this.carnetRepository = carnetRepository;
         this.lessonRepository = lessonRepository;
         this.carnetTypeRepository = carnetTypeRepository;
         this.userRepository = userRepository;
+        this.lessonService = lessonService;
+        this.carnetService = carnetService;
     }
     @ModelAttribute("allCarnetTypes")
     public List<CarnetType> allCarnetTypes() {
@@ -102,6 +107,41 @@ public class UserController {
 
         carnetRepository.save(carnet);
         return "/mainPage";
+
+    }
+    @GetMapping("/signUp/{id:[0-9]+}")
+    @Transactional
+    public String signUpForLesson(@PathVariable Long id, Model model){
+        User user = getCurrentUser();
+        if(lessonRepository.findById(id).isEmpty()){
+            model.addAttribute("message", "nie znaleziono takiej lekcji");
+            return "/schedule";
+        }
+        Lesson lesson = lessonRepository.findById(id).get();
+        List<Carnet> userProperCarnets = user.getCarnets().stream()
+                .filter(carnet -> carnet.getExpireDate().isAfter(lesson.getBeginTime().toLocalDate()))
+                .filter(carnet -> carnet.getEntrances() > 0)
+                .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber()) //compare Integers
+                .sorted(Comparator.comparing(Carnet::getExpireDate))
+                .collect(Collectors.toList());
+        if(userProperCarnets.size() == 0) {
+            model.addAttribute("message", "brak właściwego karnetu");
+            return "/schedule";
+        }
+            Carnet carnet = userProperCarnets.get(userProperCarnets.size()-1);
+            carnet.setEntrances(carnet.getEntrances()-1); //zabrać jedno wejście
+            lessonService.signUpForLesson(user.getEmail(), id);
+            if(lesson.getSlots()>0) {
+                model.addAttribute("message", "zapisano na listę rezerwową");
+                //logika listy rezerwowej
+                return "/schedule";
+            }
+            model.addAttribute("message", "zapisano na zajęcia " + lesson.getName());
+            lesson.setSlots(lesson.getSlots()-1); //zabrać jedno miejsce
+            lessonService.update(lesson);
+            carnetService.update(carnet);
+
+        return "/schedule";
 
     }
 

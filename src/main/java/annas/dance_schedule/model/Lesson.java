@@ -124,4 +124,20 @@ public class Lesson {
     public void setAccessNumber(Integer accessNumber) {
         this.accessNumber = accessNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Lesson{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", slots=" + slots +
+                ", place='" + place + '\'' +
+                ", beginTime=" + beginTime +
+                ", state='" + state + '\'' +
+                ", level='" + level + '\'' +
+                ", accessNumber=" + accessNumber +
+                ", participants=" + participants +
+                ", trainer=" + trainer +
+                '}';
+    }
 }
