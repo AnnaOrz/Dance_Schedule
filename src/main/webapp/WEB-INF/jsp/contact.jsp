@@ -11,6 +11,6 @@
     <title>Kontakt</title>
 </head>
 <body>
-<%@ include file="fragments/sideMenu.jsp" %>
+<%@ include file="fragments/topMenu.jsp" %>
 </body>
 </html>

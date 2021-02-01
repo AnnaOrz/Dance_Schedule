@@ -1,6 +1,5 @@
 package annas.dance_schedule.model;
 
-import org.hibernate.sql.Update;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -92,7 +91,7 @@ public class User {
         return role;
     }
 
-    public void setRoles(String role) {
+    public void setRole(String role) {
         this.role = role;
     }
 

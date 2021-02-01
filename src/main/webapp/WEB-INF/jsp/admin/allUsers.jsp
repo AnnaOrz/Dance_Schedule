@@ -5,11 +5,11 @@
     <title>Klienci</title>
 </head>
 <body>
-<h1> Zajęcia </h1>
+<h1> Klienci </h1>
 <c:forEach items="${allUsers}" var="user">
-    <h3> ${user.name}
-        <a href='<c:url value="/dance/trainer/users/active${user.id}"/>' >Aktywuj</a>
-        <a href='<c:url value="/dance/admin//users/edit/${user.id}"/>'>Edytuj</a>
+    <h3> ${user.email}  ${user.firstName} ${user.lastName}
+        <a href='<c:url value="/dance/user/users/activate/${user.id}"/>' >Aktywuj</a>
+        <a href='<c:url value="/dance/admin/users/edit/${user.id}"/>'>Edytuj</a>
     </h3>
 </c:forEach>
 ${message}

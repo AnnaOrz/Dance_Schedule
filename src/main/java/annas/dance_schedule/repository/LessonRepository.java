@@ -17,9 +17,14 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @Modifying
     @Transactional
     @Query("update Lesson c set c.name = ?1, c.beginTime = ?2, c.state= ?3, " +
-            "c.slots=?4, c.accessNumber= ?5, c.level=?6, c.place=?7, c.trainer=?8 WHERE c.id = ?9")
+            "c.slots=?4, c.accessNumber= ?5, c.level=?6, c.place=?7, c.trainer=?8, c.reserveList=?9 WHERE c.id = ?10")
     void update(String name, LocalDateTime beginTime, String state, Integer slots,
-                Integer accessNumber, String level, String place, User trainer, Long id);
+                Integer accessNumber, String level, String place, User trainer, List<User> reserveList, Long id);
+
+    @Modifying
+    @Transactional
+    @Query("update Lesson c set c.participants=?1, c.reserveList=?2 WHERE c.id = ?3")
+    void updateParticipants(List <User> participants, List<User> reserveList, Long id);
 
 
 }

@@ -32,6 +32,7 @@ public class UserService {
             user.setLastName(userDto.getLastName());
             user.setPassword(userDto.getPassword());
             user.setEnabled(false);
+            user.setRole("USER");
             return user;
         }
     }
@@ -55,10 +56,11 @@ public class UserService {
         } else userRepository.save(user);
     }
     public void activateUser(User user){
-        user.setRoles("User");
+        user.setRole("USER");
         user.setEnabled(true);
         update(user);
     }
+
 }
 
 

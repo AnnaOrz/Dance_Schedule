@@ -18,7 +18,7 @@
 <sec:authorize access="isAuthenticated()">
     <div> Zalogowany jako ${principal.username} </div>    </sec:authorize>
 
-<%@ include file="fragments/sideMenu.jsp" %>
+<%@ include file="fragments/topMenu.jsp" %>
 
 <sec:authorize access="isAuthenticated()">
 

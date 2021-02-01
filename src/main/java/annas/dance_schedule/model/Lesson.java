@@ -41,6 +41,9 @@ public class Lesson {
     @ManyToMany (mappedBy = "classesParticipating")
     private List<User> participants;
 
+    @ManyToMany (mappedBy = "classesParticipating")
+    private List<User> reserveList;
+
     @ManyToOne
     private User trainer;
     //zakładam że można utworzyć zajęcia bez trenera i wybrać go później.
@@ -124,6 +127,16 @@ public class Lesson {
     public void setAccessNumber(Integer accessNumber) {
         this.accessNumber = accessNumber;
     }
+
+    public List<User> getReserveList() {
+        return reserveList;
+    }
+
+    public void setReserveList(List<User> reserveList) {
+        this.reserveList = reserveList;
+    }
+
+
 
     @Override
     public String toString() {

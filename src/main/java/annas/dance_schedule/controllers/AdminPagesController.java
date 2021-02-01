@@ -8,7 +8,9 @@ import annas.dance_schedule.repository.CarnetRepository;
 import annas.dance_schedule.repository.CarnetTypeRepository;
 import annas.dance_schedule.repository.LessonRepository;
 import annas.dance_schedule.repository.UserRepository;
+import annas.dance_schedule.services.CarnetService;
 import annas.dance_schedule.services.LessonService;
+import annas.dance_schedule.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,13 +28,17 @@ public class AdminPagesController {
     private final UserRepository userRepository;
     private final LessonRepository lessonRepository;
     private final LessonService lessonService;
+    private final UserService userService;
+    private final CarnetService carnetService;
 
-    public AdminPagesController(CarnetTypeRepository carnetTypeRepository, CarnetRepository carnetRepository, UserRepository userRepository, LessonRepository lessonRepository, LessonService lessonService) {
+    public AdminPagesController(CarnetTypeRepository carnetTypeRepository, CarnetRepository carnetRepository, UserRepository userRepository, LessonRepository lessonRepository, LessonService lessonService, UserService userService, CarnetService carnetService) {
         this.carnetTypeRepository = carnetTypeRepository;
         this.carnetRepository = carnetRepository;
         this.userRepository = userRepository;
         this.lessonRepository = lessonRepository;
         this.lessonService = lessonService;
+        this.userService = userService;
+        this.carnetService = carnetService;
     }
 
 
@@ -77,6 +83,8 @@ public class AdminPagesController {
         return "carnet/add";
     }
 
+
+
     @PostMapping("/addCarnetType")
     public String addCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result, HttpServletRequest request) {
         if (result.hasErrors()) {
@@ -85,8 +93,7 @@ public class AdminPagesController {
             carnetType.setDescription(carnetType.getDescription()
                     + " cena: " + carnetType.getPrice() + " ilość wejść: " + carnetType.getEntrances());
             carnetTypeRepository.save(carnetType);
-            String message = "zapisałem nowy typ karnetu";
-            request.setAttribute("message", message);
+            request.setAttribute("message", "zapisałem nowy typ karnetu");
             return "redirect:/dance/admin/carnetTypes";
         }
     }
@@ -108,7 +115,6 @@ public class AdminPagesController {
         if (result.hasErrors()) {
             return "/lesson/add";
         }
-        //czy sprawdzać czy lekcja jest unikalna? albo np miejsce dwóch lekcji i ich czas się nie pokrywają?
         lessonRepository.save(lesson);
         return "redirect:/dance/admin/lessons";
     }
@@ -125,19 +131,41 @@ public class AdminPagesController {
 
     @GetMapping("/users/edit/{id:[0-9]+}")
     public String editUserGoToForm(@PathVariable Long id, Model model){
-        model.addAttribute("user", userRepository.findById(id));
+        model.addAttribute("user", userRepository.findById(id).get());
         return "admin/editUser";
-
+    }
+    @PostMapping("/users/edit/{id:[0-9]+}")
+    public String editUser(@ModelAttribute @Valid User user, BindingResult result) {
+        if (result.hasErrors()) { return "admin/editUser"; }
+        System.out.println(user.getRole());
+        userService.update(user);
+        return "redirect:/dance/admin/users";
     }
     @GetMapping("/lessons/edit/{id:[0-9]+}")
     public String editLessonGoToForm(@PathVariable Long id, Model model){
-        model.addAttribute("lesson", lessonRepository.findById(id));
+        model.addAttribute("lesson", lessonRepository.findById(id).get());
         return "admin/editLesson";
+    }
+    @PostMapping("/lessons/edit/{id:[0-9]+}")
+    public String editLesson(@ModelAttribute @Valid Lesson lesson, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/editLesson";
+        }
+        lessonService.update(lesson);
+        return "redirect:/dance/admin/lessons";
     }
     @GetMapping("/carnetTypes/edit/{id:[0-9]+}")
     public String editCarnetTypeGoToForm(@PathVariable Long id, Model model){
-        model.addAttribute("carnetType", carnetTypeRepository.findById(id));
+        model.addAttribute("carnetType", carnetTypeRepository.findById(id).get());
         return "admin/editCarnetType";
+    }
+    @PostMapping("/carnetTypes/edit/{id:[0-9]+}")
+    public String editCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result) {
+        if (result.hasErrors()) {
+            return "admin/editCarnetType";
+        }
+        carnetService.update(carnetType);
+        return "redirect:/dance/admin/carnetTypes";
     }
 
 

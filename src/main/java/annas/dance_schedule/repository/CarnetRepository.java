@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CarnetRepository extends JpaRepository <Carnet, Long> {
-    Optional<Carnet> findAllByExpireDateBefore(Date activeTo);
+    Optional<Carnet> findAllByExpireDateBefore(LocalDate activeTo);
     Optional<Carnet> findAllByPrice(BigDecimal price);
     List<Carnet> findAllByUserId(Long userId);
     @Modifying
@@ -24,4 +24,5 @@ public interface CarnetRepository extends JpaRepository <Carnet, Long> {
             "c.price=?4, c.startDate=?5, c.user=?6 WHERE c.id = ?7")
     void update(Integer accessNumber, Integer entrances, LocalDate expireDate,
                 BigDecimal price, LocalDate startDate, User user, Long id);
+    List<Carnet> findAllByUserAndExpireDateAfter(LocalDate activeTo, User user);
 }

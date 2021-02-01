@@ -2,6 +2,7 @@ package annas.dance_schedule;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -11,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.sql.DataSource;
 
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private final DataSource dataSource;
 
@@ -47,7 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/dance/**").hasAnyAuthority("USER" , "ADMIN" , "TRAINER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .and().formLogin();
+                .and().formLogin().permitAll()
+                .and().logout().permitAll()
+                .and().exceptionHandling().accessDeniedPage("/denied");
 
     }
 

@@ -7,17 +7,17 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<%@ include file="../fragments/sideMenu.jsp" %>
+<%@ include file="../fragments/topMenu.jsp" %>
 
 <form:form method="post" modelAttribute="user" >
 
-    FirstName: <form:input path="firstName" /> <br />
+    Imię: <form:input path="firstName" /> <br />
     <form:errors path="firstName" /> <br/>
-    UserName: <form:input path="lastName" /> <br />
+    Nazwisko: <form:input path="lastName" /> <br />
     <form:errors path="lastName" /> <br/>
     Email: <form:input path="email" /> <br />
     <form:errors path="email" /> <br/>
-    Password: <form:input path="password" type="password" /> <br/>
+    Hasło: <form:input path="password" type="password" /> <br/>
     <form:errors path="password" /> <br/>
     <input type="submit" value="save" />
 
