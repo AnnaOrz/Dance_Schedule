@@ -50,6 +50,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/dance/**").hasAnyAuthority("USER" , "ADMIN" , "TRAINER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin().permitAll()
+                .defaultSuccessUrl("/schedule", true)
                 .and().logout().permitAll()
                 .and().exceptionHandling().accessDeniedPage("/denied");
 

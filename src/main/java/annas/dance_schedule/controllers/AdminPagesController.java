@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -132,6 +133,8 @@ public class AdminPagesController {
     @GetMapping("/users/edit/{id:[0-9]+}")
     public String editUserGoToForm(@PathVariable Long id, Model model){
         model.addAttribute("user", userRepository.findById(id).get());
+        List<String> enabled = Arrays.asList("true", "false");
+        model.addAttribute("enabled", enabled);
         return "admin/editUser";
     }
     @PostMapping("/users/edit/{id:[0-9]+}")

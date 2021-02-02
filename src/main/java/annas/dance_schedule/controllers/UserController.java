@@ -71,6 +71,11 @@ public class UserController {
         model.addAttribute("allUserCarnets", allUserCarnets);
         return "user/carnets";
     }
+
+    @GetMapping("/edit")
+    public String userEditHisData(Model model){
+        return "DOKOŃCZYĆ !!!";
+    }
     @RequestMapping("/classes")
     public String userClasses(Model model){
         List<Lesson> userLessonsApproaching = lessonRepository.findLessonsByBeginTimeAfter(LocalDateTime.now());
@@ -200,8 +205,7 @@ public class UserController {
     public String ActivateUser(@PathVariable Long id) throws NoSuchElementException {
         User user = userRepository.findById(id).orElseThrow();
         userService.activateUser(user);
-        return "udało się";
-
+        return "/dance/user";
     }
 
 

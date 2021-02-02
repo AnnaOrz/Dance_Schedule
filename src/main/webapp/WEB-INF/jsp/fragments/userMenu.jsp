@@ -1,15 +1,13 @@
 <%--
   Created by IntelliJ IDEA.
   User: anda
-  Date: 21.01.2021
-  Time: 10:07
+  Date: 02.02.2021
+  Time: 13:50
   To change this template use File | Settings | File Templates.
 --%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
-<!DOCTYPE html>
-<html lang="pl">
+<html>
 
 <body>
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -21,21 +19,26 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
+
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="<c:url value="/registration"/>">Rejestracja</a>
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/buy"/>">Kup karnet</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="<c:url value="/login"/>">Logowanie</a>
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/carnets"/>">Moje karnety</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="<c:url value="/schedule"/>">Grafik zajęć</a>
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/classes"/>">Moje zajęcia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="<c:url value="/contact"/>">Kontakt</a>
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/edit"/>">Moje dane</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/logout"/>">Wyloguj</a>
+                </li>
+                <li class="nav-item">Zalogowany jako ${principal.username} </li>
             </ul>
         </div>
     </div>
 </nav>
-
 </body>
+</html>
