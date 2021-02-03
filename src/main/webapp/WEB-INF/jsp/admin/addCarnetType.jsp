@@ -16,7 +16,7 @@
 <body>
 
 <form:form method="post" modelAttribute="carnet" >
-    <div>To jest form dla admina do tworzenia typów karnetów</div>
+    <h1>Utwórz typ karnetu</h1>
 
     Wejścia: <form:input path="entrances" /> <br />
     <form:errors path="entrances" /> <br/>

@@ -52,7 +52,7 @@ public class LessonService {
             if (lessonParticipants.size() > lesson.getSlots() - 1) {
                 for (int i = lessonParticipants.size() - 1; i > lesson.getSlots(); i--) {
                     User user = lessonParticipants.get(i);
-                    Carnet userCarnet = carnetRepository.findAllByUserAndExpireDateAfter(lesson.getBeginTime().toLocalDate(), user)
+                    Carnet userCarnet = carnetRepository.findAllByUserAndExpireDateAfter(user, lesson.getBeginTime().toLocalDate())
                             .stream()
                             .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber())
                             .findFirst().get(); //użytkownik zapisany na dane zajęcia musi mieć jakiś aktywny karnet

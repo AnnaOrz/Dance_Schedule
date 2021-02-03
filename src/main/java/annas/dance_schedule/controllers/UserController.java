@@ -17,13 +17,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.Access;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -58,26 +56,29 @@ public class UserController {
         this.userRepository = userRepository;
         this.lessonService = lessonService;
         this.carnetService = carnetService;
-
         this.userService = userService;
     }
+
     @ModelAttribute("allCarnetTypes")
     public List<CarnetType> allCarnetTypes() {
         return carnetTypeRepository.findAll();
     }
 
     @ModelAttribute("allAvailableCarnetTypes")
-    public List<CarnetType> allAvailableCarnetTypes() {return carnetTypeRepository.findAllAvailable();}
+    public List<CarnetType> allAvailableCarnetTypes() {
+        return carnetTypeRepository.findAllAvailable();
+    }
 
     @RequestMapping("/carnets")
-    public String userCarnets(Model model){
-        List<Carnet> allUserCarnets = carnetRepository.findAllByUserId(getCurrentUser().getId());
-        model.addAttribute("allUserCarnets", allUserCarnets);
+    public String userCarnets(Model model) {
+        model.addAttribute("userActiveCarnets", carnetRepository.findAllByUserAndExpireDateAfter(getCurrentUser(), LocalDate.now().minusDays(1)));
+        model.addAttribute("userFormerCarnets", carnetRepository.findAllByUserAndExpireDateBefore(getCurrentUser(), LocalDate.now()));
         return "user/carnets";
     }
+
     @GetMapping("/data/edit/{id:[0-9]+}")
-    public String userEditHisDataGoToForm(@PathVariable Long id, Model model){
-        if(getCurrentUser().getId().equals(id)) {
+    public String userEditHisDataGoToForm(@PathVariable Long id, Model model) {
+        if (getCurrentUser().getId().equals(id)) {
             model.addAttribute("user", getCurrentUser());
             return "user/editUser";
         } else {
@@ -85,25 +86,26 @@ public class UserController {
             return "user/accountData";
         }
     }
+
     @PostMapping("/data/edit")
-    public String userEditHisData(@ModelAttribute @Valid User user, BindingResult result){
+    public String userEditHisData(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return "user/editUser";
-        } else{
+        } else {
             userService.update(user);
         }
-
-        return "DOKOŃCZYĆ !!!";
+        return "user/accountData";
     }
+
     @RequestMapping("/data")
-    public String showUserData(Model model){
+    public String showUserData(Model model) {
         model.addAttribute("user", getCurrentUser());
         return "user/accountData";
     }
 
 
     @RequestMapping("/classes")
-    public String userClasses(Model model){
+    public String userClasses(Model model) {
         User currentUser = getCurrentUser();
         List<Lesson> userLessonsApproaching = lessonRepository.findLessonsByBeginTimeAfter(LocalDateTime.now()).stream()
                 .filter(lesson -> lesson.getParticipants().contains(currentUser))
@@ -116,24 +118,25 @@ public class UserController {
         return "user/classes";
 
     }
+
     @GetMapping("/buy")
     public String buyForm(Model model) {
 
         model.addAttribute("carnetDto", new CarnetDto());
 
-        return "carnet/buy";
+        return "user/buyCarnet";
     }
 
     @PostMapping("/buy")
-    public String buyCarnet(@ModelAttribute @Valid CarnetDto carnetDto , BindingResult result) {
+    public String buyCarnet(@ModelAttribute @Valid CarnetDto carnetDto, BindingResult result) {
         if (result.hasErrors()) {
-            return "carnet/buy";
+            return "user/buyCarnet";
         }
 
         UserDetails current = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         String userName = current.getUsername();
-        if(userRepository.findByEmail(userName).isEmpty()){
+        if (userRepository.findByEmail(userName).isEmpty()) {
             logger.log(Level.INFO, "nie znalazłem aktywnego użytkownika");
             return "/";
         }
@@ -150,85 +153,91 @@ public class UserController {
         carnet.setExpireDate(carnetDto.getStartDate().plusDays(30));
 
         carnetRepository.save(carnet);
-        return "/mainPage";
+        return "redirect:/dance/user/carnets";
 
     }
+
     @RequestMapping("/signUp/{id:[0-9]+}")
     @Transactional
-    public String signUpForLesson(@PathVariable Long id, Model model){
+    public String signUpForLesson(@PathVariable Long id, Model model) {
         User user = getCurrentUser();
-        if(lessonRepository.findById(id).isEmpty()){
+        if (lessonRepository.findById(id).isEmpty()) {
             model.addAttribute("message", "nie znaleziono takiej lekcji");
             return "/schedule";
         }
         Lesson lesson = lessonRepository.findById(id).get();
-        if(!lesson.getState().equals("active")){
+        if (!lesson.getState().equals("active")) {
             model.addAttribute("message", "Nie możesz już zapisać się na tę lekcję");
             return "/schedule";
         }
-        if(lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)){
+        if (lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)) {
             model.addAttribute("message", "Na dane zajęcia możesz zapisać się tylko raz");
             return "/schedule";
         }
         List<Carnet> userProperCarnets = user.getCarnets().stream()
                 .filter(carnet -> carnet.getExpireDate().isAfter(lesson.getBeginTime().toLocalDate()))
                 .filter(carnet -> carnet.getEntrances() > 0)
-                .filter(carnet -> carnet.getAccessNumber().equals(lesson.getAccessNumber())) //compare Integers
-                .sorted(Comparator.comparing(Carnet::getExpireDate)) //carnet o najdłuższej ważności na końcu
+                .filter(carnet -> carnet.getAccessNumber().equals(lesson.getAccessNumber()))
+                .sorted(Comparator.comparing(Carnet::getExpireDate))
                 .collect(Collectors.toList());
-        if(userProperCarnets.size() == 0) {
+        if (userProperCarnets.size() == 0) {
             model.addAttribute("message", "brak właściwego karnetu");
             return "/schedule";
         }
-            Carnet carnet = userProperCarnets.get(0);
-            carnet.setEntrances(carnet.getEntrances()-1); //zabrać jedno wejście
-            lessonService.signUpForLesson(user.getEmail(), id);
-            if(lesson.getParticipants().size()>= lesson.getSlots()) {
-                model.addAttribute("message", "Zapisano na listę rezerwową" + lesson.getName());
-                return "/schedule";
-            } else {
-                model.addAttribute("message", "Zapisano na zajęcia:  " + lesson.getName());
-            }
-            carnetService.update(carnet);
+        Carnet carnet = userProperCarnets.get(0);
+        carnet.setEntrances(carnet.getEntrances() - 1);
+        lessonService.signUpForLesson(user.getEmail(), id);
+        if (lesson.getParticipants().size() >= lesson.getSlots()) {
+            model.addAttribute("message", "Zapisano na listę rezerwową" + lesson.getName());
+            return "/schedule";
+        } else {
+            model.addAttribute("message", "Zapisano na zajęcia:  " + lesson.getName());
+        }
+        carnetService.update(carnet);
 
         return "redirect:/schedule";
 
     }
+
     @Transactional
     @RequestMapping("/optOut/{id:[0-9]+}")
-    public String optOutOfLesson(@PathVariable Long id, Model model){
+    public String optOutOfLesson(@PathVariable Long id, Model model) {
         User user = getCurrentUser();
-        if(lessonRepository.findById(id).isEmpty()){
+        if (lessonRepository.findById(id).isEmpty()) {
             model.addAttribute("message", "nie znaleziono takiej lekcji");
             return "/schedule";
         }
 
         Lesson lesson = lessonRepository.findById(id).get();
-        if(!lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)){
+        if (!lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)) {
             model.addAttribute("message", "już wcześniej wypisano Cię z tej lekcji");
             return "/schedule";
         }
 
-        if(lesson.getBeginTime().toLocalDate().isAfter(LocalDate.now())) {
-            boolean entranceRestored = userService.addOneEntranceToUserProperCarnet(user,lesson);
-            if(!entranceRestored) {
+        if (lesson.getBeginTime().toLocalDate().isAfter(LocalDate.now())) {
+            boolean entranceRestored = userService.addOneEntranceToUserProperCarnet(user, lesson);
+            if (!entranceRestored) {
                 model.addAttribute("message", "Nie znaleziono karnetu do zwrócenia wejścia");
             }
-        } //dodaj jedno wejście do karnetu użytkownika gdy data lekcji następuje po dzisiejszej
-            lessonRepository.deleteParticipant(user.getId(),lesson.getId());
+        }
+        lessonRepository.deleteParticipant(user.getId(), lesson.getId());
         List<Lesson> userClasses = user.getClassesParticipating();
         userClasses.remove(lesson);
         user.setClassesParticipating(userClasses);
         model.addAttribute("userClasses", userClasses);
 
-            return "/user/classes";
+        return "/user/classes";
 
-        }
+    }
 
     @PreAuthorize("hasAuthority('TRAINER')")
     @GetMapping("/users/activate/{id:[0-9]+}")
-    public String ActivateUser(@PathVariable Long id) throws NoSuchElementException {
-        User user = userRepository.findById(id).orElseThrow();
+    public String ActivateUser(@PathVariable Long id, Model model) {
+        if (userRepository.findById(id).isEmpty()) {
+            model.addAttribute("message", "nie znaleziono takiego użytkownika");
+            return "/schedule";
+        }
+        User user = userRepository.findById(id).get();
         userService.activateUser(user);
         return "/dance/user";
     }

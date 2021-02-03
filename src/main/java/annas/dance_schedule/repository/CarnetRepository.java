@@ -24,5 +24,7 @@ public interface CarnetRepository extends JpaRepository <Carnet, Long> {
             "c.price=?4, c.startDate=?5, c.user=?6 WHERE c.id = ?7")
     void update(Integer accessNumber, Integer entrances, LocalDate expireDate,
                 BigDecimal price, LocalDate startDate, User user, Long id);
-    List<Carnet> findAllByUserAndExpireDateAfter(LocalDate activeTo, User user);
+
+    List<Carnet> findAllByUserAndExpireDateAfter(User user, LocalDate date);
+    List<Carnet> findAllByUserAndExpireDateBefore(User user, LocalDate date);
 }

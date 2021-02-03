@@ -1,10 +1,12 @@
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 <html>
 <head>
     <title>Edycja danych</title>
     <meta charset="UTF-8">
+
 </head>
 <body>
 <%@ include file="../fragments/topMenu.jsp" %>

@@ -17,7 +17,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -75,27 +74,29 @@ public class AdminPagesController {
     }
 
     @RequestMapping("/carnetTypes")
-    public String goToCarnetTypes() {
+    public String goToCarnetTypes(Model model) {
+        model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
         return "/admin/allCarnetTypes";
     }
 
     @GetMapping("/addCarnetType")
     public String addCarnetTypeGoToForm(Model model) {
         model.addAttribute("carnet", new CarnetType());
-        return "carnet/add";
+        return "admin/addCarnetType";
     }
 
 
 
     @PostMapping("/addCarnetType")
-    public String addCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result, HttpServletRequest request) {
+    public String addCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result, Model model) {
         if (result.hasErrors()) {
-            return "/carnet/add";
+            return "admin/addCarnetType";
         } else {
             carnetType.setDescription(carnetType.getDescription()
                     + " cena: " + carnetType.getPrice() + " ilość wejść: " + carnetType.getEntrances());
             carnetTypeRepository.save(carnetType);
-            request.setAttribute("message", "zapisałem nowy typ karnetu");
+            model.addAttribute("message", "zapisałem nowy typ karnetu");
+            model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
             return "redirect:/dance/admin/carnetTypes";
         }
     }
@@ -109,13 +110,13 @@ public class AdminPagesController {
     @GetMapping("/lessons/add")
     public String addLessonGoToForm(Model model) {
         model.addAttribute("lesson", new Lesson());
-        return "lesson/add";
+        return "admin/addNewLesson";
     }
 
     @PostMapping("/lessons/add")
     public String addLesson(@ModelAttribute @Valid Lesson lesson, BindingResult result) {
         if (result.hasErrors()) {
-            return "/lesson/add";
+            return "admin/addNewLesson";
         }
         lessonRepository.save(lesson);
         return "redirect:/dance/admin/lessons";
@@ -146,6 +147,10 @@ public class AdminPagesController {
 
     @GetMapping("/users/edit/{id:[0-9]+}")
     public String editUserGoToForm(@PathVariable Long id, Model model){
+        if(userRepository.findById(id).isEmpty()){
+            model.addAttribute("message", "nie znalazłem takiego użytkownika");
+            return "admin/allUsers";
+        }
         model.addAttribute("user", userRepository.findById(id).get());
         List<String> enabled = Arrays.asList("true", "false");
         model.addAttribute("enabled", enabled);
@@ -173,15 +178,30 @@ public class AdminPagesController {
     }
     @GetMapping("/carnetTypes/edit/{id:[0-9]+}")
     public String editCarnetTypeGoToForm(@PathVariable Long id, Model model){
-        model.addAttribute("carnetType", carnetTypeRepository.findById(id).get());
-        return "admin/editCarnetType";
+        if(carnetTypeRepository.findById(id).isPresent()) {
+            model.addAttribute("carnetType", carnetTypeRepository.findById(id).get());
+            return "admin/editCarnetType";
+        } else {
+            model.addAttribute("message", "niepoprawne dane do edycji");
+            model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
+            model.addAttribute("boolean", Arrays.asList("true", "false"));
+            return "admin/allCarnetTypes";
+        }
     }
     @PostMapping("/carnetTypes/edit/{id:[0-9]+}")
-    public String editCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result) {
+    public String editCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "admin/editCarnetType";
         }
         carnetService.update(carnetType);
+        model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
+        return "redirect:/dance/admin/carnetTypes";
+    }
+    @RequestMapping("/carnetTypes/delete/{id:[0-9]+}")
+    public String deleteCarnetType(@PathVariable Long id, Model model){
+        carnetTypeRepository.deleteById(id);
+        model.addAttribute("message", "usunięto pomyślnie wybrany typ karnetu");
+        model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
         return "redirect:/dance/admin/carnetTypes";
     }
 

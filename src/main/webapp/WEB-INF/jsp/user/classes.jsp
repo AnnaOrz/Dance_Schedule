@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 <%--
   Created by IntelliJ IDEA.
   User: anda
@@ -12,6 +13,7 @@
     <title>Moje zajęcia</title>
 </head>
 <body>
+<%@ include file="../fragments/userMenu.jsp" %>
 <h1> Moje zajęcia</h1>
             <table class="table table-light table-striped">
                 <thead>
