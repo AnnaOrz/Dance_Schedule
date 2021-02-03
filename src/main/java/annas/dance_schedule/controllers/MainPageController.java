@@ -6,6 +6,7 @@ import annas.dance_schedule.model.User;
 import annas.dance_schedule.model.UserDto;
 import annas.dance_schedule.repository.LessonRepository;
 import annas.dance_schedule.repository.UserRepository;
+import annas.dance_schedule.services.LessonService;
 import annas.dance_schedule.services.UserService;
 import org.springframework.stereotype.Controller;
 
@@ -22,11 +23,13 @@ public class MainPageController {
     private final UserService userService;
     private final UserRepository userRepository;
     private final LessonRepository lessonRepository;
+    private final LessonService lessonService;
 
-    public MainPageController(UserService userService, UserRepository userRepository, LessonRepository lessonRepository) {
+    public MainPageController(UserService userService, UserRepository userRepository, LessonRepository lessonRepository, LessonService lessonService) {
         this.userService = userService;
         this.userRepository = userRepository;
         this.lessonRepository = lessonRepository;
+        this.lessonService = lessonService;
     }
     @ResponseBody
     @RequestMapping("/denied")
@@ -46,17 +49,24 @@ public class MainPageController {
         return "user/registrationForm";
     }
     @PostMapping("/registration")
-    public String registerNewUser(@ModelAttribute @Valid UserDto userDto, BindingResult result) throws UserAlreadyExistException {
+    public String registerNewUser(@ModelAttribute @Valid UserDto userDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "user/registrationForm";
         } else {
-            User user = userService.registerNewUserAccount(userDto);
-            userRepository.save(user);
-            return "mainPage";
+            try {
+                User user = userService.registerNewUserAccount(userDto);
+                userRepository.save(user);
+                return "mainPage";
+            } catch (UserAlreadyExistException e) {
+                model.addAttribute("message", "Taki mail jest już zarejestrowany");
+                return "user/RegistrationForm";
+            }
         }
     }
     @RequestMapping("/schedule")
     public String goToSchedule(Model model){
+        lessonService.UpdateLessonsStatus();
+
         model.addAttribute("classes", lessonRepository.findAll());
         return "/schedule";
     }

@@ -25,16 +25,15 @@ ${message}
         <th scope="col">Trener</th>
         <th scope="col">Ilość uczestników</th>
         <th scope="col">Ilość miejsc</th>
-        <th scope="col">Ilość osób na liście rezerwowej</th>
 
 
     </tr>
     </thead>
     <c:forEach items="${allLessons}" var="lesson">
     <tr>
-        <td> <a href='<c:url value="/dance/admin/lessons/cancel${lesson.id}"/>'
+        <td> <a href='<c:url value="/dance/admin/lessons/cancel/${lesson.id}"/>'
                 onclick="return confirm('Czy na pewno chcesz odwołać lekcję?')">Odwołaj</a></td>
-        <td><a href='<c:url value="/dance/admin//lessons/edit/${lesson.id}"/>'>Edytuj</a></td>
+        <td><a href='<c:url value="/dance/admin/lessons/edit/${lesson.id}"/>'>Edytuj</a></td>
         <th scope="row">${lesson.id}</th>
         <td>${lesson.name}</td>
         <td>${lesson.beginTime.toLocalDate()} ${lesson.beginTime.toLocalTime()} </td>
@@ -45,7 +44,7 @@ ${message}
         <td>${lesson.trainer}</td>
         <td>${lesson.participants.size()}</td>
         <td>${lesson.slots}</td>
-        <td>${lesson.reserveList.size()}</td>
+
 
     </tr>
     </c:forEach>

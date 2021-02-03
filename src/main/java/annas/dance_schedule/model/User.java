@@ -25,10 +25,11 @@ public class User {
 
     private String password;
 
-    @Transient //żeby nie było można zrobić persist na tym, ale czy to jest mi w ogóle niezbędne?
+    @Transient
     private String passwordConfirm;
 
-    @OneToMany(cascade = CascadeType.ALL)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="user")
     private List<Carnet> carnets;
 
     @ManyToMany (cascade = CascadeType.ALL)

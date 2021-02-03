@@ -12,6 +12,7 @@ import annas.dance_schedule.services.CarnetService;
 import annas.dance_schedule.services.LessonService;
 import annas.dance_schedule.services.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -117,6 +118,19 @@ public class AdminPagesController {
             return "/lesson/add";
         }
         lessonRepository.save(lesson);
+        return "redirect:/dance/admin/lessons";
+    }
+    @Transactional
+    @RequestMapping("/lessons/cancel/{id:[0-9]+}")
+    public String cancelLesson(@PathVariable Long id) {
+        Lesson lesson = lessonRepository.getOne(id);
+        lesson.setState("canceled");
+        List<User> participants = lesson.getParticipants();
+        for (User user : participants) {
+            lessonRepository.deleteParticipant(user.getId(), lesson.getId());
+            userService.addOneEntranceToUserProperCarnet(user,lesson);
+        }
+
         return "redirect:/dance/admin/lessons";
     }
 

@@ -1,10 +1,4 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: anda
-  Date: 02.02.2021
-  Time: 13:50
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 <html>
@@ -18,8 +12,9 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/schedule"/>">Grafik</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/buy"/>">Kup karnet</a>
                 </li>
@@ -30,7 +25,7 @@
                     <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/classes"/>">Moje zajęcia</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/edit"/>">Moje dane</a>
+                    <a class="nav-link active" aria-current="page" href="<c:url value="/dance/user/data"/>">Moje dane</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="<c:url value="/logout"/>">Wyloguj</a>

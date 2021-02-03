@@ -10,8 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.persistence.EntityManager;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -25,56 +28,59 @@ public class LessonService {
     private final UserRepository userRepository;
     private final CarnetRepository carnetRepository;
     private final CarnetService carnetService;
+    private final EntityManager entityManager;
     private final Logger logger = Logger.getLogger("LessonService");
 
-    public LessonService(LessonRepository lessonRepository, UserRepository userRepository, CarnetRepository carnetRepository, CarnetService carnetService) {
+    public LessonService(LessonRepository lessonRepository, UserRepository userRepository, CarnetRepository carnetRepository, CarnetService carnetService, EntityManager entityManager) {
         this.lessonRepository = lessonRepository;
         this.userRepository = userRepository;
         this.carnetRepository = carnetRepository;
         this.carnetService = carnetService;
+        this.entityManager = entityManager;
     }
 
+    @Transactional
+    public void UpdateLessonsStatus() {
+        List<Lesson> allLessons = lessonRepository.findAll();
+        List<Lesson> activeLessons = allLessons.stream()
+                .filter(this::LessonBegins)
+                .filter(lesson -> lesson.getState().equals("active"))
+                .collect(Collectors.toList());
+        for (Lesson lesson : activeLessons) {
+            List<User> lessonParticipants = lesson.getParticipants();
 
-    public void UpdateLessonsStatus(){
-        List<Lesson> futureLessons = lessonRepository.findLessonsByBeginTimeAfter(LocalDateTime.now());
-        List<Lesson> activeLessonsApproaching = futureLessons.stream()
-                    .filter(this::LessonBegins)
-                    .filter(lesson -> lesson.getState().equals("active"))
-                    .collect(Collectors.toList());
-        for(Lesson lesson : activeLessonsApproaching){
+            if (lessonParticipants.size() > lesson.getSlots() - 1) {
+                for (int i = lessonParticipants.size() - 1; i > lesson.getSlots(); i--) {
+                    User user = lessonParticipants.get(i);
+                    Carnet userCarnet = carnetRepository.findAllByUserAndExpireDateAfter(lesson.getBeginTime().toLocalDate(), user)
+                            .stream()
+                            .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber())
+                            .findFirst().get(); //użytkownik zapisany na dane zajęcia musi mieć jakiś aktywny karnet
+                    userCarnet.setEntrances(userCarnet.getEntrances() + 1);
+                    carnetService.update(userCarnet);
+                    lessonRepository.deleteParticipant(user.getId(),lesson.getId());
 
-            if(lesson.getReserveList().size()>0){
-                List<User> reserveList = lesson.getReserveList();
-                for(User user : reserveList){
-                   Carnet userCarnet = carnetRepository.findAllByUserAndExpireDateAfter(lesson.getBeginTime().toLocalDate(), user)
-                           .stream()
-                           .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber())
-                           .findFirst().get(); //użytkownik zapisany na dane zajęcia musi mieć jakiś aktywny karnet
-                   userCarnet.setEntrances(userCarnet.getEntrances()+1);
-                   carnetService.update(userCarnet);
-                   logger.log(Level.INFO, " zwrócono jedno wejście na zajęcia" + user.getEmail());
+                    logger.log(Level.INFO, " zwrócono jedno wejście na zajęcia i wypisano z listy rezerwowej: " + user.getEmail());
                 }
-                lesson.setReserveList(new ArrayList<>());
-                updateParticipants(lesson);
             }
         }
 
 
-            activeLessonsApproaching.forEach(lesson -> lesson.setState("started"));
-            activeLessonsApproaching.forEach(this::update);
-            logger.log(Level.INFO, "Zaktualizowano status nadchodzących zajęć w ilości  " + activeLessonsApproaching.size());
+        activeLessons.forEach(lesson -> lesson.setState("started"));
+        activeLessons.forEach(this::update);
+        logger.log(Level.INFO, "Zaktualizowano status nadchodzących zajęć w ilości  " + activeLessons.size());
 
     }
 
-    public boolean LessonBegins(Lesson lesson){
-        //jeśli dzień rozpoczęcia lekcji jest dzisiaj i godzina rozpoczęcia lekcji następuje wśród najbliższych 2 godzin
-        return lesson.getBeginTime().getDayOfYear() == LocalDateTime.now().getDayOfYear()
-                && lesson.getBeginTime().getHour() <= LocalDateTime.now().getHour() + 2;
+    public boolean LessonBegins(Lesson lesson) {
+        //jeśli dzień rozpoczęcia lekcji jest przed dniem dzisiejszym lub dzisiaj i godzina rozpoczęcia lekcji następuje wśród najbliższych 2 godzin
+        return lesson.getBeginTime().isBefore(LocalDateTime.now().plusHours(2));
     }
+
     @Transactional
     public void update(Lesson lesson) {
         Optional<Lesson> oldLesson = lessonRepository.findById(lesson.getId());
-        if(oldLesson.isPresent()){
+        if (oldLesson.isPresent()) {
             lessonRepository.update(
                     lesson.getName(),
                     lesson.getBeginTime(),
@@ -84,27 +90,45 @@ public class LessonService {
                     lesson.getLevel(),
                     lesson.getPlace(),
                     lesson.getTrainer(),
-                    lesson.getReserveList(),
                     lesson.getId()
             );
         }
     }
+
     @Transactional
     public void signUpForLesson(String userEmail, Long lessonId) {
         if (userRepository.findByEmail(userEmail).isPresent()
-            && lessonRepository.findById(lessonId).isPresent()) {
+                && lessonRepository.findById(lessonId).isPresent()) {
             User user = userRepository.findByEmail(userEmail).get();
-            List <Lesson> userLessons = user.getClassesParticipating();
-            userLessons.add(lessonRepository.findById(lessonId).get());
-            userRepository.updateUserLessons(userLessons, user.getId());
-        }
-    }
-    @Transactional
-    public void updateParticipants(Lesson lesson){
-        Optional<Lesson> oldLesson = lessonRepository.findById(lesson.getId());
-        if(oldLesson.isPresent()){
-            lessonRepository.updateParticipants(lesson.getParticipants(), lesson.getReserveList(), lesson.getId());
+            Lesson lesson = lessonRepository.findById(lessonId).get();
+            List<User> participants = lesson.getParticipants();
+            participants.add(user);
+            lesson.setParticipants(participants);
+            addNewParticipantsToLesson(lesson);
+
         }
     }
 
+    @Transactional
+    public void addNewParticipantsToLesson(Lesson lesson) {
+        Optional<Lesson> oldLesson = lessonRepository.findById(lesson.getId());
+        if (oldLesson.isPresent()) {
+            List<User> participants = lesson.getParticipants();
+
+            for (User user : participants) {
+                if (!lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)) {
+                    lessonRepository.insertParticipant(user.getId(), lesson.getId());
+                }
+
+            }
+
+        }
+    }
+    public List<Lesson> getTodayClasses(LocalDate date){
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.atTime(23,59);
+        List<Lesson> todayLessons = lessonRepository.findLessonsByBeginTimeBetween(startOfDay,endOfDay);
+        todayLessons.sort(Comparator.comparing(Lesson::getBeginTime));
+        return todayLessons;
+    }
 }

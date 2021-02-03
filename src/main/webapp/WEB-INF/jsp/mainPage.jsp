@@ -14,9 +14,8 @@
     <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
-<sec:authorize access="isAnonymous()">
     <%@ include file="fragments/topMenu.jsp" %>
-</sec:authorize>
+
 
 
 <sec:authorize access="isAuthenticated()">

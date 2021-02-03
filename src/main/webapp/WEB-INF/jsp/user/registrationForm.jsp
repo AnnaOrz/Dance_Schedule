@@ -8,6 +8,7 @@
 </head>
 <body>
 <%@ include file="../fragments/topMenu.jsp" %>
+<div class="alert-warning"> ${message} </div>
 
 <form:form method="post" modelAttribute="user" >
 

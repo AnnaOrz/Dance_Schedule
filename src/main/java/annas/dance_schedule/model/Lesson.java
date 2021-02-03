@@ -37,12 +37,9 @@ public class Lesson {
     @NotNull
     private Integer accessNumber;
 
-
-    @ManyToMany (mappedBy = "classesParticipating")
+    @ManyToMany (mappedBy = "classesParticipating", cascade = CascadeType.ALL)
     private List<User> participants;
 
-    @ManyToMany (mappedBy = "classesParticipating")
-    private List<User> reserveList;
 
     @ManyToOne
     private User trainer;
@@ -128,13 +125,13 @@ public class Lesson {
         this.accessNumber = accessNumber;
     }
 
-    public List<User> getReserveList() {
+/*    public List<User> getReserveList() {
         return reserveList;
     }
 
     public void setReserveList(List<User> reserveList) {
         this.reserveList = reserveList;
-    }
+    }*/
 
 
 

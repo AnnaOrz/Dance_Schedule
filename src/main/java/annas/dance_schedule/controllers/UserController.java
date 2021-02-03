@@ -17,12 +17,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.Access;
 import javax.validation.Valid;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Controller
@@ -35,6 +38,7 @@ public class UserController {
     private final LessonService lessonService;
     private final CarnetService carnetService;
     private final UserService userService;
+    private final Logger logger = Logger.getLogger("UserController");
 
     public User getCurrentUser() {
         UserDetails current = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -71,15 +75,42 @@ public class UserController {
         model.addAttribute("allUserCarnets", allUserCarnets);
         return "user/carnets";
     }
+    @GetMapping("/data/edit/{id:[0-9]+}")
+    public String userEditHisDataGoToForm(@PathVariable Long id, Model model){
+        if(getCurrentUser().getId().equals(id)) {
+            model.addAttribute("user", getCurrentUser());
+            return "user/editUser";
+        } else {
+            model.addAttribute("message", "nie masz dostępu do tych danych");
+            return "user/accountData";
+        }
+    }
+    @PostMapping("/data/edit")
+    public String userEditHisData(@ModelAttribute @Valid User user, BindingResult result){
+        if (result.hasErrors()) {
+            return "user/editUser";
+        } else{
+            userService.update(user);
+        }
 
-    @GetMapping("/edit")
-    public String userEditHisData(Model model){
         return "DOKOŃCZYĆ !!!";
     }
+    @RequestMapping("/data")
+    public String showUserData(Model model){
+        model.addAttribute("user", getCurrentUser());
+        return "user/accountData";
+    }
+
+
     @RequestMapping("/classes")
     public String userClasses(Model model){
-        List<Lesson> userLessonsApproaching = lessonRepository.findLessonsByBeginTimeAfter(LocalDateTime.now());
-        List<Lesson> userLessonsPassed = lessonRepository.findLessonsByBeginTimeBefore(LocalDateTime.now());
+        User currentUser = getCurrentUser();
+        List<Lesson> userLessonsApproaching = lessonRepository.findLessonsByBeginTimeAfter(LocalDateTime.now()).stream()
+                .filter(lesson -> lesson.getParticipants().contains(currentUser))
+                .collect(Collectors.toList());
+        List<Lesson> userLessonsPassed = lessonRepository.findLessonsByBeginTimeBefore(LocalDateTime.now()).stream()
+                .filter(lesson -> lesson.getParticipants().contains(currentUser))
+                .collect(Collectors.toList());
         model.addAttribute("userClasses", userLessonsApproaching);
         model.addAttribute("userPassedClasses", userLessonsPassed);
         return "user/classes";
@@ -103,7 +134,8 @@ public class UserController {
 
         String userName = current.getUsername();
         if(userRepository.findByEmail(userName).isEmpty()){
-            return "nie znalazłem aktywnego użytkownika";
+            logger.log(Level.INFO, "nie znalazłem aktywnego użytkownika");
+            return "/";
         }
         User currentUser = userRepository.findByEmail(userName).get();
 
@@ -130,10 +162,18 @@ public class UserController {
             return "/schedule";
         }
         Lesson lesson = lessonRepository.findById(id).get();
+        if(!lesson.getState().equals("active")){
+            model.addAttribute("message", "Nie możesz już zapisać się na tę lekcję");
+            return "/schedule";
+        }
+        if(lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)){
+            model.addAttribute("message", "Na dane zajęcia możesz zapisać się tylko raz");
+            return "/schedule";
+        }
         List<Carnet> userProperCarnets = user.getCarnets().stream()
                 .filter(carnet -> carnet.getExpireDate().isAfter(lesson.getBeginTime().toLocalDate()))
                 .filter(carnet -> carnet.getEntrances() > 0)
-                .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber()) //compare Integers
+                .filter(carnet -> carnet.getAccessNumber().equals(lesson.getAccessNumber())) //compare Integers
                 .sorted(Comparator.comparing(Carnet::getExpireDate)) //carnet o najdłuższej ważności na końcu
                 .collect(Collectors.toList());
         if(userProperCarnets.size() == 0) {
@@ -144,20 +184,17 @@ public class UserController {
             carnet.setEntrances(carnet.getEntrances()-1); //zabrać jedno wejście
             lessonService.signUpForLesson(user.getEmail(), id);
             if(lesson.getParticipants().size()>= lesson.getSlots()) {
-                List<User> reserveList = lesson.getReserveList();
-                reserveList.add(user);
-                lesson.setReserveList(reserveList);
-                model.addAttribute("message", "zapisano na listę rezerwową");
+                model.addAttribute("message", "Zapisano na listę rezerwową" + lesson.getName());
                 return "/schedule";
             } else {
-                model.addAttribute("message", "zapisano na zajęcia " + lesson.getName());
+                model.addAttribute("message", "Zapisano na zajęcia:  " + lesson.getName());
             }
-            lessonService.update(lesson);
             carnetService.update(carnet);
 
-        return "/schedule";
+        return "redirect:/schedule";
 
     }
+    @Transactional
     @RequestMapping("/optOut/{id:[0-9]+}")
     public String optOutOfLesson(@PathVariable Long id, Model model){
         User user = getCurrentUser();
@@ -165,40 +202,28 @@ public class UserController {
             model.addAttribute("message", "nie znaleziono takiej lekcji");
             return "/schedule";
         }
+
         Lesson lesson = lessonRepository.findById(id).get();
-        if(lesson.getBeginTime().toLocalDate().isAfter(LocalDate.now())) {
-            List<Carnet> userProperCarnets = user.getCarnets().stream()
-                    .filter(carnet -> carnet.getExpireDate().isAfter(lesson.getBeginTime().toLocalDate()))
-                    .filter(carnet -> carnet.getEntrances() > 0)
-                    .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber()) //compare Integers
-                    .sorted(Comparator.comparing(Carnet::getExpireDate)) //carnet o najdłuższej ważności na końcu
-                    .collect(Collectors.toList());
-            if (userProperCarnets.size() == 0) {
-                model.addAttribute("message", "brak właściwego karnetu");
-                return "/schedule";
-            }
-            Carnet carnet = userProperCarnets.get(userProperCarnets.size() - 1);
-            carnet.setEntrances(carnet.getEntrances() + 1);
-        } //dodaj jedno wejście do karnetu użytkownika gdy data lekcji następuje po dzisiejszej
-            List<User> lessonParticipants = lesson.getParticipants();
-            lessonParticipants.remove(user);
-            List<User> reserveList = lesson.getReserveList();
-            if(reserveList.size()>0){ //jeśli lekcja ma listę rezerwową to weź pierwszego z listy rezerwowej i przenieś do participants
-                User user2 = reserveList.get(0);
-                lessonParticipants.add(user2);
-                reserveList.remove(0);
-            }
-            lessonService.updateParticipants(lesson);
+        if(!lessonRepository.findLessonsByParticipantsIsContaining(user).contains(lesson)){
+            model.addAttribute("message", "już wcześniej wypisano Cię z tej lekcji");
             return "/schedule";
-
-
-
-
         }
 
+        if(lesson.getBeginTime().toLocalDate().isAfter(LocalDate.now())) {
+            boolean entranceRestored = userService.addOneEntranceToUserProperCarnet(user,lesson);
+            if(!entranceRestored) {
+                model.addAttribute("message", "Nie znaleziono karnetu do zwrócenia wejścia");
+            }
+        } //dodaj jedno wejście do karnetu użytkownika gdy data lekcji następuje po dzisiejszej
+            lessonRepository.deleteParticipant(user.getId(),lesson.getId());
+        List<Lesson> userClasses = user.getClassesParticipating();
+        userClasses.remove(lesson);
+        user.setClassesParticipating(userClasses);
+        model.addAttribute("userClasses", userClasses);
 
+            return "/user/classes";
 
-
+        }
 
     @PreAuthorize("hasAuthority('TRAINER')")
     @GetMapping("/users/activate/{id:[0-9]+}")
@@ -207,7 +232,4 @@ public class UserController {
         userService.activateUser(user);
         return "/dance/user";
     }
-
-
-
 }

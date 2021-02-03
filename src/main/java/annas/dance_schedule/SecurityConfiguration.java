@@ -6,6 +6,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -32,15 +33,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 
     }
-/*    @Bean
+    @Bean
     public PasswordEncoder getPasswordEncoder(){
       return  new BCryptPasswordEncoder();
-    }*/
+    }
 
-    @Bean
+/*    @Bean
     public PasswordEncoder getPasswordEncoder() {
         return NoOpPasswordEncoder.getInstance();
-    }
+    }*/
 
 
     @Override
@@ -51,7 +52,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin().permitAll()
                 .defaultSuccessUrl("/schedule", true)
-                .and().logout().permitAll()
+                .and().logout().permitAll().logoutSuccessUrl("/")
                 .and().exceptionHandling().accessDeniedPage("/denied");
 
     }
