@@ -81,7 +81,7 @@ public class AdminPagesController {
 
     @GetMapping("/addCarnetType")
     public String addCarnetTypeGoToForm(Model model) {
-        model.addAttribute("carnet", new CarnetType());
+        model.addAttribute("carnetType", new CarnetType());
         return "admin/addCarnetType";
     }
 
@@ -159,7 +159,9 @@ public class AdminPagesController {
     @PostMapping("/users/edit/{id:[0-9]+}")
     public String editUser(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) { return "admin/editUser"; }
-        System.out.println(user.getRole());
+        if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
+            user.setPassword(userService.EncodeUserPassword(user.getPassword()));
+        }
         userService.update(user);
         return "redirect:/dance/admin/users";
     }

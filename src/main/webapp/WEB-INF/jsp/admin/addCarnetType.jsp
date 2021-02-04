@@ -1,12 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: anda
-  Date: 19.01.2021
-  Time: 09:11
-  To change this template use File | Settings | File Templates.
---%>
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 
 <html>
 <head>
@@ -15,22 +10,36 @@
 </head>
 <body>
 
-<form:form method="post" modelAttribute="carnet" >
-    <h1>Utwórz typ karnetu</h1>
+<form:form method="post" modelAttribute="carnetType" >
+<dl class="row">
+    <dt class="col-sm-3">Opis</dt>
+    <dd class="col-sm-9">
+        <form:input path="description" value="${carnetType.description}"/>
+        <form:errors path="description" /></dd>
 
-    Wejścia: <form:input path="entrances" /> <br />
-    <form:errors path="entrances" /> <br/>
-    Poziom cenowy: <form:input path="accessNumber" /> <br />
-    <form:errors path="accessNumber" /> <br/>
-    Cena: <form:input path="price" /> <br />
-    <form:errors path="price" /> <br/>
-    Opis: <form:input path="description" /> <br />
-    <form:errors path="description" /> <br/>
-    <input type="submit" value="save" />
-    <form:hidden path="id" value="${carnet.id}"/> <%--będzie ważne do edycji--%>
-    <form:hidden path="available" value="true"/>
+    <dt class="col-sm-3"> Liczba wejść </dt>
+    <dd class="col-sm-9">
+        <form:input path="entrances" value="${carnetType.entrances}" />
+        <form:errors path="entrances" />  </dd>
 
-</form:form>
+
+    <dt class="col-sm-3">Poziom wejścia</dt>
+    <dd class="col-sm-9">
+        <form:input path="accessNumber" value="${carnetType.accessNumber}" />
+        <form:errors path="accessNumber" />  </dd>
+
+    <dt class="col-sm-3">Cena</dt>
+    <dd class="col-sm-9">
+        <form:input path="price" value="${carnetType.price}" />
+        <form:errors path="price" /> </dd>
+    <dt class="col-sm-3">Dostępny w sprzedaży </dt>
+    <dd class="col-sm-9">
+        <form:select items="${boolean}" path="available" value="${carnetType.available}"/>
+        <form:errors path="available" /></dd>
+
+    <dt class="col-sm-3">
+        <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz"> </dt>
+    </form:form>
 </body>
 
 </html>

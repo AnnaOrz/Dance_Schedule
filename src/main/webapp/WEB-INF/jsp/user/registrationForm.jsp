@@ -1,7 +1,7 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<html>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 <head>
     <title>Rejestracja</title>
     <meta charset="UTF-8">
@@ -11,17 +11,27 @@
 <div class="alert-warning"> ${message} </div>
 
 <form:form method="post" modelAttribute="user" >
+<dl class="row">
+    <dt class="col-sm-3">Imię</dt>
+    <dd class="col-sm-9">
+        <form:input path="firstName" value="${user.firstName}"/>
+        <form:errors path="firstName" /></dd>
+    <dt class="col-sm-3">Nazwisko:</dt>
+    <dd class="col-sm-9">
+        <form:input path="lastName" value="${user.lastName}"/>
+        <form:errors path="lastName" /> </dd>
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">
+        <form:input path="email" value="${user.email}" />
+        <form:errors path="email" />  </dd>
 
-    Imię: <form:input path="firstName" /> <br />
-    <form:errors path="firstName" /> <br/>
-    Nazwisko: <form:input path="lastName" /> <br />
-    <form:errors path="lastName" /> <br/>
-    Email: <form:input path="email" /> <br />
-    <form:errors path="email" /> <br/>
-    Hasło: <form:input path="password" type="password" /> <br/>
-    <form:errors path="password" /> <br/>
-    <input type="submit" value="save" />
+    <dt class="col-sm-3">Hasło</dt>
+    <dd class="col-sm-9">
+        <form:input path="password" type="password" value="${user.password}" />
+        <form:errors path="password" /> </dd>
 
-</form:form>
+    <dt class="col-sm-3">
+        <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz"> </dt>
+    </form:form>
 </body>
 </html>

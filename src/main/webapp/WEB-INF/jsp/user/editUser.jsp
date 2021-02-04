@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
@@ -6,6 +6,7 @@
 <head>
     <title>Edycja danych</title>
     <meta charset="UTF-8">
+
 
 </head>
 <body>

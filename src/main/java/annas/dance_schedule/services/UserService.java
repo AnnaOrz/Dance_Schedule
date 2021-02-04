@@ -84,6 +84,9 @@ public class UserService {
         carnet.setEntrances(carnet.getEntrances() + 1);
         return true;
     }
+    public String EncodeUserPassword(String password){
+        return passwordEncoder.encode(password);
+    }
 
 }
 

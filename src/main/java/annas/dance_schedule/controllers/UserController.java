@@ -92,6 +92,9 @@ public class UserController {
         if (result.hasErrors()) {
             return "user/editUser";
         } else {
+            if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
+                user.setPassword(userService.EncodeUserPassword(user.getPassword()));
+            }
             userService.update(user);
         }
         return "user/accountData";
