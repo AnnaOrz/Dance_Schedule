@@ -14,7 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 @Controller
@@ -63,11 +66,17 @@ public class MainPageController {
             }
         }
     }
-    @RequestMapping("/schedule")
+    @GetMapping("/schedule")
     public String goToSchedule(Model model){
         lessonService.UpdateLessonsStatus();
-
         model.addAttribute("classes", lessonRepository.findAll());
+        return "/schedule";
+    }
+    @PostMapping("/schedule")
+    public String goToScheduleSearch(Model model, HttpServletRequest request){
+        lessonService.UpdateLessonsStatus();
+        LocalDate date = LocalDate.parse(request.getParameter("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        model.addAttribute("classes", lessonRepository.findAllByBeginTime_Date(date));
         return "/schedule";
     }
     @RequestMapping("/contact")

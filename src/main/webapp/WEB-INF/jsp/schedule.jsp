@@ -22,6 +22,10 @@
 
 ${message.toString()}
 <table class="table table-light table-striped">
+    <form class="d-flex" method="post">
+        <input class="form-control me-2" type="date" placeholder="Szukaj według dnia" aria-label="Search" name="date">
+        <button class="btn btn-outline-success" type="submit"> Wyszukaj </button>
+    </form>
     <thead>
     <tr>
 
@@ -59,10 +63,6 @@ ${message.toString()}
     </tr>
     </c:forEach>
 
-
-
-
-
-
+</table>
 </body>
 </html>

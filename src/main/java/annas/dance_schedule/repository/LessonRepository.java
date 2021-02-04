@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,5 +34,6 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     void deleteParticipant(Long participantsId, Long lessonId);
 
     List<Lesson> findLessonsByBeginTimeBetween(LocalDateTime start, LocalDateTime end);
+    List<Lesson> findAllByBeginTime_Date(LocalDate date);
 
 }
