@@ -1,9 +1,6 @@
 package annas.dance_schedule.controllers;
 
-import annas.dance_schedule.model.Carnet;
-import annas.dance_schedule.model.CarnetType;
-import annas.dance_schedule.model.Lesson;
-import annas.dance_schedule.model.User;
+import annas.dance_schedule.model.*;
 import annas.dance_schedule.repository.CarnetRepository;
 import annas.dance_schedule.repository.CarnetTypeRepository;
 import annas.dance_schedule.repository.LessonRepository;
@@ -109,16 +106,27 @@ public class AdminPagesController {
 
     @GetMapping("/lessons/add")
     public String addLessonGoToForm(Model model) {
-        model.addAttribute("lesson", new Lesson());
+        model.addAttribute("lessonDto", new LessonDto());
         return "admin/addNewLesson";
     }
 
     @PostMapping("/lessons/add")
-    public String addLesson(@ModelAttribute @Valid Lesson lesson, BindingResult result) {
+    public String addLesson(@ModelAttribute @Valid LessonDto lessonDto, BindingResult result) {
         if (result.hasErrors()) {
-            return "admin/addNewLesson";
+            System.out.println(result.getAllErrors().toString());
+            return  "admin/addNewLesson";
         }
+        Lesson lesson = new Lesson();
+        lesson.setState("active");
+        lesson.setSlots(lessonDto.getSlots());
+        lesson.setAccessNumber(lessonDto.getAccessNumber());
+        lesson.setBeginTime(lessonDto.getBeginTime());
+        lesson.setTrainer(userRepository.getOne(lessonDto.getTrainerId()));
+        lesson.setPlace(lessonDto.getPlace());
+        lesson.setLevel(lessonDto.getLevel());
+        lesson.setName(lessonDto.getName());
         lessonRepository.save(lesson);
+        System.out.println("Zapisałem leckję");
         return "redirect:/dance/admin/lessons";
     }
     @Transactional

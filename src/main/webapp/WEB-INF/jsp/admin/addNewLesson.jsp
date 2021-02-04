@@ -10,35 +10,37 @@
 </head>
 <body>
 <h2>Dodanie nowej lekcji</h2>
-<form:form method="post" modelAttribute="lesson" >
+<form:form method="post" modelAttribute="lessonDto" >
 <dl class="row">
     <dt class="col-sm-3">Nazwa </dt>
     <dd class="col-sm-9">
-        <form:input path="name" value="${lesson.name}"/>
+        <form:input path="name" value="${lessonDto.name}"/>
         <form:errors path="name" /></dd>
+    <dt class="col-sm-3">Ilość miejsc </dt>
+    <dd class="col-sm-9">
+        <form:input path="slots" value="${lessonDto.slots}"/>
+        <form:errors path="slots" /></dd>
     <dt class="col-sm-3">Data i godzina rozpoczęcia</dt>
     <dd class="col-sm-9">
-        <form:input path="beginTime" type="datetime-local"  value="${lesson.beginTime}"/>
+        <form:input path="beginTime" type="datetime-local"  value="${lessonDto.beginTime}"/>
         <form:errors path="beginTime" /> </dd>
     <dt class="col-sm-3">Poziom </dt>
     <dd class="col-sm-9">
-        <form:input path="level" value="${lesson.level}" />
+        <form:input path="level" value="${lessonDto.level}" />
         <form:errors path="level" />  </dd>
     <dt class="col-sm-3">Miejsce </dt>
     <dd class="col-sm-9">
-        <form:input path="place" value="${lesson.place}" />
+        <form:input path="place" value="${lessonDto.place}" />
         <form:errors path="place" /> </dd>
     <dt class="col-sm-3">Trener </dt>
     <dd class="col-sm-9">
-        <form:select items="${allTrainers}" path="trainer" value="${lesson.trainer.lastName}"/>
-        <form:errors path="trainer" /></dd>
+        <form:input path="trainerId" type="number"/>
+        <form:errors path="trainerId" /></dd>
     <dt class="col-sm-3">Poziom wejścia</dt>
     <dd class="col-sm-9">
-        <form:input path="accessNumber" type="number" value="${lesson.accessNumber}" />
+        <form:input path="accessNumber" type="number" value="${lessonDto.accessNumber}" />
         <form:errors path="accessNumber" /> </dd>
     <dt class="col-sm-3">
-        <form:hidden path="state" value="active" /> <br/>
-        <form:hidden path="id" value="${lesson.id}"/>
         <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz zmiany"> </dt>
     </form:form>
 </dl>

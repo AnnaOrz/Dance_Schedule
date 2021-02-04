@@ -6,6 +6,7 @@
     <title>Moje karnety</title>
 </head>
 <body>
+<%@ include file="../fragments/userMenu.jsp" %>
 <h2> Karnety Aktywne</h2>
 
     ${message}

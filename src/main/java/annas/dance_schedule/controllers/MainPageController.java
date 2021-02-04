@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 
 @Controller
@@ -69,15 +71,21 @@ public class MainPageController {
     @GetMapping("/schedule")
     public String goToSchedule(Model model){
         lessonService.UpdateLessonsStatus();
-        model.addAttribute("classes", lessonRepository.findAll());
+        model.addAttribute("classes", lessonRepository.findLessonsByBeginTimeAfter(LocalDate.now().atStartOfDay()));
         return "/schedule";
     }
     @PostMapping("/schedule")
     public String goToScheduleSearch(Model model, HttpServletRequest request){
         lessonService.UpdateLessonsStatus();
-        LocalDate date = LocalDate.parse(request.getParameter("date"), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        model.addAttribute("classes", lessonRepository.findAllByBeginTime_Date(date));
+        try{
+        LocalDate date = LocalDate.parse(request.getParameter("date"));
+        model.addAttribute("classes", lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23,59)));
+        System.out.println(lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23,59)).size());
         return "/schedule";
+        } catch (DateTimeParseException dtE)  {
+            return "redirect:/schedule";
+
+        }
     }
     @RequestMapping("/contact")
     public String contact(){

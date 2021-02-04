@@ -42,7 +42,7 @@ ${message}
         <td>${lesson.accessNumber}</td>
         <td>${lesson.level}</td>
         <td>${lesson.place}</td>
-        <td>${lesson.trainer}</td>
+        <td>${lesson.trainer.lastName}</td>
         <td>${lesson.participants.size()}</td>
         <td>${lesson.slots}</td>
 

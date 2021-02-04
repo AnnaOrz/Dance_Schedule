@@ -34,6 +34,5 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     void deleteParticipant(Long participantsId, Long lessonId);
 
     List<Lesson> findLessonsByBeginTimeBetween(LocalDateTime start, LocalDateTime end);
-    List<Lesson> findAllByBeginTime_Date(LocalDate date);
 
 }

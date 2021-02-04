@@ -21,11 +21,18 @@
 </sec:authorize>
 
 ${message.toString()}
+<form class="d-flex" method="post">
+    <div>
+    <input class="form-control me-2" type="date" placeholder="Search" aria-label="Search" name="date">
+        <input type="hidden"
+               name="${_csrf.parameterName}"
+               value="${_csrf.token}"/>
+
+        <button class="btn btn-outline-success" type="submit"> Wybierz zajęcia według daty </button>
+    </div>
+</form>
 <table class="table table-light table-striped">
-    <form class="d-flex" method="post">
-        <input class="form-control me-2" type="date" placeholder="Szukaj według dnia" aria-label="Search" name="date">
-        <button class="btn btn-outline-success" type="submit"> Wyszukaj </button>
-    </form>
+
     <thead>
     <tr>
 
@@ -55,7 +62,7 @@ ${message.toString()}
         <td>${lesson.accessNumber}</td>
         <td>${lesson.level}</td>
         <td>${lesson.place}</td>
-        <td>${lesson.trainer}</td>
+        <td>${lesson.trainer.lastName}</td>
         <td>${lesson.slots}/${lesson.participants.size()}</td>
         <td></td>
 
