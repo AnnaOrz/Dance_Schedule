@@ -5,6 +5,8 @@ import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -20,12 +22,13 @@ public class User {
     private boolean enabled;
     
     @Email
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
+    @NotBlank
     private String email;
 
     private String role;
 
-    @NotNull
+    @NotBlank
     private String password;
 
     @Transient
