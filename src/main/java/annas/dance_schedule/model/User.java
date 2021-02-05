@@ -20,8 +20,7 @@ public class User {
     private boolean enabled;
     
     @Email
-    @NotNull
-    @UniqueElements
+    @Column(unique = true, nullable = false)
     private String email;
 
     private String role;

@@ -191,7 +191,6 @@ public class AdminPagesController {
     @PostMapping("/lessons/edit/{id:[0-9]+}")
     public String editLesson(@ModelAttribute @Valid Lesson lesson, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println(result.getAllErrors().toString());
             return "admin/editLesson";
         }
         lessonService.update(lesson);

@@ -83,6 +83,7 @@ public class UserController {
             return "user/editUser";
         } else {
             model.addAttribute("message", "nie masz dostępu do tych danych");
+            model.addAttribute("user", getCurrentUser());
             return "user/accountData";
         }
     }
@@ -90,13 +91,13 @@ public class UserController {
     @PostMapping("/data/edit/{id:[0-9]+}")
     public String userEditHisData(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
+            System.out.println(result.getAllErrors().toString());
             return "user/editUser";
-        } else {
-            if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
-                user.setPassword(userService.EncodeUserPassword(user.getPassword()));
-            }
-            userService.update(user);
         }
+        if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
+            user.setPassword(userService.EncodeUserPassword(user.getPassword()));
+        }
+            userService.update(user);
         return "user/accountData";
     }
 

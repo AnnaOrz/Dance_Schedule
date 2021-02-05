@@ -35,6 +35,7 @@
     <dd class="col-sm-9">
         <form:input path="role" value="${user.role}"/>
         <form:errors path="role" /></dd>
+
     <dt class="col-sm-3">Aktywowany</dt>
     <dd class="col-sm-9">
         <form:select items="${enabled}" path="enabled" value="${user.enabled}" />
