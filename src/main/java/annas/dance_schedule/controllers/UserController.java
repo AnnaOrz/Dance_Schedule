@@ -87,7 +87,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/data/edit")
+    @PostMapping("/data/edit/{id:[0-9]+}")
     public String userEditHisData(@ModelAttribute @Valid User user, BindingResult result) {
         if (result.hasErrors()) {
             return "user/editUser";

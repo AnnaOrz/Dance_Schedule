@@ -19,22 +19,22 @@
 
     <dt class="col-sm-3"> Liczba wejść </dt>
     <dd class="col-sm-9">
-        <form:input path="entrances" value="${carnetType.entrances}" />
+        <form:input path="entrances" type="number" value="${carnetType.entrances}" />
         <form:errors path="entrances" />  </dd>
 
 
     <dt class="col-sm-3">Poziom wejścia</dt>
     <dd class="col-sm-9">
-        <form:input path="accessNumber" value="${carnetType.accessNumber}" />
+        <form:input path="accessNumber" type="number" value="${carnetType.accessNumber}" />
         <form:errors path="accessNumber" />  </dd>
 
     <dt class="col-sm-3">Cena</dt>
     <dd class="col-sm-9">
-        <form:input path="price" value="${carnetType.price}" />
+        <form:input path="price"  type="number" value="${carnetType.price}" />
         <form:errors path="price" /> </dd>
     <dt class="col-sm-3">Dostępny w sprzedaży </dt>
     <dd class="col-sm-9">
-        <form:select items="${boolean}" path="available" value="${carnetType.available}"/>
+        <form:checkbox path="available" name="available " value="${carnetType.available}"/>
         <form:errors path="available" /></dd>
 
     <dt class="col-sm-3">

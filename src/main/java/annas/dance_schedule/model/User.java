@@ -1,6 +1,8 @@
 package annas.dance_schedule.model;
 
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -16,13 +18,15 @@ public class User {
 
     @NotNull
     private boolean enabled;
-
-    @Column(nullable = false, unique = true)
+    
     @Email
+    @NotNull
+    @UniqueElements
     private String email;
 
     private String role;
 
+    @NotNull
     private String password;
 
     @Transient

@@ -30,8 +30,6 @@ ${message}
         <td>${carnet.expireDate}</td>
         <td>${carnet.accessNumber}</td>
         <td>${carnet.user.email}</td>
-        <td><a href='<c:url value="/dance/admin/carnets/delete/${carnet.id}"/>'
-               onclick="return confirm('Czy na pewno chcesz usunąć ten karnet?')">Usuń</a></td>
         <td><a href='<c:url value="/dance/admin/carnets/edit/${carnet.id}"/>'>Edytuj</a></td>
 
     </tr>

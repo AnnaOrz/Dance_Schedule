@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.Arrays;
 import java.util.List;
@@ -62,8 +63,9 @@ public class AdminPagesController {
 
     @ModelAttribute("allTrainers")
     public List<User> allTrainers() {
-        return userRepository.findAllByRole("Trainer");
+        return userRepository.findAllByRole("TRAINER");
     }
+
 
     @RequestMapping("")
     public String goToAdminMenu() {
@@ -81,7 +83,6 @@ public class AdminPagesController {
         model.addAttribute("carnetType", new CarnetType());
         return "admin/addCarnetType";
     }
-
 
 
     @PostMapping("/addCarnetType")
@@ -113,8 +114,7 @@ public class AdminPagesController {
     @PostMapping("/lessons/add")
     public String addLesson(@ModelAttribute @Valid LessonDto lessonDto, BindingResult result) {
         if (result.hasErrors()) {
-            System.out.println(result.getAllErrors().toString());
-            return  "admin/addNewLesson";
+            return "admin/addNewLesson";
         }
         Lesson lesson = new Lesson();
         lesson.setState("active");
@@ -129,6 +129,7 @@ public class AdminPagesController {
         System.out.println("Zapisałem leckję");
         return "redirect:/dance/admin/lessons";
     }
+
     @Transactional
     @RequestMapping("/lessons/cancel/{id:[0-9]+}")
     public String cancelLesson(@PathVariable Long id) {
@@ -137,7 +138,7 @@ public class AdminPagesController {
         List<User> participants = lesson.getParticipants();
         for (User user : participants) {
             lessonRepository.deleteParticipant(user.getId(), lesson.getId());
-            userService.addOneEntranceToUserProperCarnet(user,lesson);
+            userService.addOneEntranceToUserProperCarnet(user, lesson);
         }
 
         return "redirect:/dance/admin/lessons";
@@ -154,8 +155,8 @@ public class AdminPagesController {
     }
 
     @GetMapping("/users/edit/{id:[0-9]+}")
-    public String editUserGoToForm(@PathVariable Long id, Model model){
-        if(userRepository.findById(id).isEmpty()){
+    public String editUserGoToForm(@PathVariable Long id, Model model) {
+        if (userRepository.findById(id).isEmpty()) {
             model.addAttribute("message", "nie znalazłem takiego użytkownika");
             return "admin/allUsers";
         }
@@ -164,40 +165,51 @@ public class AdminPagesController {
         model.addAttribute("enabled", enabled);
         return "admin/editUser";
     }
+
     @PostMapping("/users/edit/{id:[0-9]+}")
     public String editUser(@ModelAttribute @Valid User user, BindingResult result) {
-        if (result.hasErrors()) { return "admin/editUser"; }
-        if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
+        if (result.hasErrors()) {
+            return "admin/editUser";
+        }
+        if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
             user.setPassword(userService.EncodeUserPassword(user.getPassword()));
         }
         userService.update(user);
         return "redirect:/dance/admin/users";
     }
+
     @GetMapping("/lessons/edit/{id:[0-9]+}")
-    public String editLessonGoToForm(@PathVariable Long id, Model model){
+    public String editLessonGoToForm(@PathVariable Long id, Model model) {
+        if (lessonRepository.findById(id).isEmpty()) {
+            model.addAttribute("message", "Nie znaleziono lekcji o wybranym id");
+            return "admin/allLessons";
+        }
         model.addAttribute("lesson", lessonRepository.findById(id).get());
         return "admin/editLesson";
     }
+
     @PostMapping("/lessons/edit/{id:[0-9]+}")
     public String editLesson(@ModelAttribute @Valid Lesson lesson, BindingResult result) {
         if (result.hasErrors()) {
+            System.out.println(result.getAllErrors().toString());
             return "admin/editLesson";
         }
         lessonService.update(lesson);
         return "redirect:/dance/admin/lessons";
     }
+
     @GetMapping("/carnetTypes/edit/{id:[0-9]+}")
-    public String editCarnetTypeGoToForm(@PathVariable Long id, Model model){
-        if(carnetTypeRepository.findById(id).isPresent()) {
+    public String editCarnetTypeGoToForm(@PathVariable Long id, Model model) {
+        if (carnetTypeRepository.findById(id).isPresent()) {
             model.addAttribute("carnetType", carnetTypeRepository.findById(id).get());
             return "admin/editCarnetType";
         } else {
             model.addAttribute("message", "niepoprawne dane do edycji");
             model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
-            model.addAttribute("boolean", Arrays.asList("true", "false"));
             return "admin/allCarnetTypes";
         }
     }
+
     @PostMapping("/carnetTypes/edit/{id:[0-9]+}")
     public String editCarnetType(@ModelAttribute @Valid CarnetType carnetType, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -207,12 +219,34 @@ public class AdminPagesController {
         model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
         return "redirect:/dance/admin/carnetTypes";
     }
+
     @RequestMapping("/carnetTypes/delete/{id:[0-9]+}")
-    public String deleteCarnetType(@PathVariable Long id, Model model){
+    public String deleteCarnetType(@PathVariable Long id, Model model) {
         carnetTypeRepository.deleteById(id);
         model.addAttribute("message", "usunięto pomyślnie wybrany typ karnetu");
         model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
         return "redirect:/dance/admin/carnetTypes";
+    }
+    @GetMapping("/carnets/edit/{id:[0-9]+}")
+    public String editCarnetGoToForm(@PathVariable Long id, Model model) {
+        if (carnetRepository.findById(id).isPresent()) {
+            model.addAttribute("carnet", carnetRepository.findById(id).get());
+            return "admin/editCarnet";
+        } else {
+            model.addAttribute("message", "niepoprawne dane do edycji");
+            model.addAttribute("carnets", carnetRepository.findAll());
+            return "admin/allCarnets";
+        }
+    }
+    @PostMapping("/carnets/edit/{id:[0-9]+}")
+    public String editCarnet(@ModelAttribute @Valid Carnet carnet, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            System.out.println(result.getAllErrors().toString());
+            return "admin/editCarnet";
+        }
+        carnetService.update(carnet);
+        model.addAttribute("carnets", carnetRepository.findAll());
+        return "redirect:/dance/admin/carnets";
     }
 
 

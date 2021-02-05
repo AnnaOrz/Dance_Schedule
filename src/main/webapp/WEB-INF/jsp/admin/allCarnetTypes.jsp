@@ -37,7 +37,7 @@ ${message}
         <td>${carnetType.available}</td>
         <td><a href='<c:url value="/dance/admin/carnetTypes/delete/${carnetType.id}"/>'
                onclick="return confirm('Czy na pewno chcesz usunąć typ karnetów?')">Usuń</a></td>
-        <td><a href='<c:url value="/dance/admin/carnetTypes/edit/${carnet.id}"/>'>Edytuj</a></td>
+        <td><a href='<c:url value="/dance/admin/carnetTypes/edit/${carnetType.id}"/>'>Edytuj</a></td>
 
     </tr>
 

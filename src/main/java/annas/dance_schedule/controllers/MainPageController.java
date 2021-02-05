@@ -50,7 +50,7 @@ public class MainPageController {
 
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new UserDto());
+        model.addAttribute("userDto", new UserDto());
         return "user/registrationForm";
     }
     @PostMapping("/registration")

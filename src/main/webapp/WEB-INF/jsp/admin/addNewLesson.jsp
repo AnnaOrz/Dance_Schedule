@@ -18,7 +18,7 @@
         <form:errors path="name" /></dd>
     <dt class="col-sm-3">Ilość miejsc </dt>
     <dd class="col-sm-9">
-        <form:input path="slots" value="${lessonDto.slots}"/>
+        <form:input path="slots" type="number" value="${lessonDto.slots}"/>
         <form:errors path="slots" /></dd>
     <dt class="col-sm-3">Data i godzina rozpoczęcia</dt>
     <dd class="col-sm-9">

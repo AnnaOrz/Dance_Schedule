@@ -49,9 +49,9 @@ public class LessonService {
         for (Lesson lesson : activeLessons) {
             List<User> lessonParticipants = lesson.getParticipants();
 
-            if (lessonParticipants.size() > lesson.getSlots() - 1) {
-                for (int i = lessonParticipants.size() - 1; i > lesson.getSlots(); i--) {
-                    User user = lessonParticipants.get(i);
+            if (lessonParticipants.size() > lesson.getSlots()) {
+                for (int i = lessonParticipants.size(); i > lesson.getSlots(); i--) {
+                    User user = lessonParticipants.get(i-1);
                     Carnet userCarnet = carnetRepository.findAllByUserAndExpireDateAfter(user, lesson.getBeginTime().toLocalDate())
                             .stream()
                             .filter(carnet -> carnet.getAccessNumber() >= lesson.getAccessNumber())
@@ -124,7 +124,7 @@ public class LessonService {
 
         }
     }
-    public List<Lesson> getTodayClasses(LocalDate date){
+    public List<Lesson> getLessonByDate(LocalDate date){
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(23,59);
         List<Lesson> todayLessons = lessonRepository.findLessonsByBeginTimeBetween(startOfDay,endOfDay);
