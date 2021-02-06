@@ -18,17 +18,17 @@ public class User {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
+    @NotNull (message="pole nie może być puste")
     private boolean enabled;
     
     @Email
     @Column(unique = true)
-    @NotBlank
+    @NotBlank (message="pole nie może być puste")
     private String email;
 
     private String role;
 
-    @NotBlank
+    @NotBlank (message="pole nie może być puste")
     private String password;
 
     @Transient
