@@ -11,69 +11,68 @@ import java.math.BigDecimal;
 @Entity
 public class CarnetType {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-        @NotNull
-        private Integer entrances;
-        @NotNull
-        private BigDecimal price;
-        @NotNull
-        private Integer accessNumber;
-        //if accessNumber of carnetType is higher or equal accesNumber of class - it allow to sign in to this class
+    @NotNull
+    private Integer entrances;
+    @NotNull
+    private BigDecimal price;
+    @NotNull
+    private Integer accessNumber;
 
-        @NotNull
-        private String description;
-        @NotNull
-        boolean isAvailable;
-        //only carnetTypes with :true will be available to buy by users
+    @NotNull
+    private String description;
+    @NotNull
+    boolean isAvailable;
+    //true will be available to buy by users
 
-        public Long getId() {
-                return id;
-        }
+    public Long getId() {
+        return id;
+    }
 
-        public void setId(Long id) {
-                this.id = id;
-        }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-        public Integer getEntrances() {
-                return entrances;
-        }
+    public Integer getEntrances() {
+        return entrances;
+    }
 
-        public void setEntrances(Integer entrances) {
-                this.entrances = entrances;
-        }
+    public void setEntrances(Integer entrances) {
+        this.entrances = entrances;
+    }
 
-        public BigDecimal getPrice() {
-                return price;
-        }
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-        public void setPrice(BigDecimal price) {
-                this.price = price;
-        }
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
 
-        public Integer getAccessNumber() {
-                return accessNumber;
-        }
+    public Integer getAccessNumber() {
+        return accessNumber;
+    }
 
-        public void setAccessNumber(Integer accessNumber) {
-                this.accessNumber = accessNumber;
-        }
+    public void setAccessNumber(Integer accessNumber) {
+        this.accessNumber = accessNumber;
+    }
 
-        public String getDescription() {
-                return description;
-        }
+    public String getDescription() {
+        return description;
+    }
 
-        public void setDescription(String description) {
-                this.description = description;
-        }
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-        public boolean isAvailable() {
-                return isAvailable;
-        }
+    public boolean isAvailable() {
+        return isAvailable;
+    }
 
-        public void setAvailable(boolean available) {
-                isAvailable = available;
-        }
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
 }

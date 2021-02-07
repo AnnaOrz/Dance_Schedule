@@ -1,18 +1,16 @@
 package annas.dance_schedule.model;
 
-import org.hibernate.validator.constraints.Range;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 
 
 @Entity
-@Table(name="classes")
+@Table(name = "classes")
 public class Lesson {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,13 +35,12 @@ public class Lesson {
     @NotNull
     private Integer accessNumber;
 
-    @ManyToMany (mappedBy = "classesParticipating", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "classesParticipating", cascade = CascadeType.ALL)
     private List<User> participants;
 
 
     @ManyToOne
     private User trainer;
-    //zakładam że można utworzyć zajęcia bez trenera i wybrać go później.
 
     public Long getId() {
         return id;
@@ -77,11 +74,11 @@ public class Lesson {
         this.place = place;
     }
 
-    public LocalDateTime  getBeginTime() {
+    public LocalDateTime getBeginTime() {
         return beginTime;
     }
 
-    public void setBeginTime(LocalDateTime  beginTime) {
+    public void setBeginTime(LocalDateTime beginTime) {
         this.beginTime = beginTime;
     }
 
@@ -124,16 +121,6 @@ public class Lesson {
     public void setAccessNumber(Integer accessNumber) {
         this.accessNumber = accessNumber;
     }
-
-/*    public List<User> getReserveList() {
-        return reserveList;
-    }
-
-    public void setReserveList(List<User> reserveList) {
-        this.reserveList = reserveList;
-    }*/
-
-
 
     @Override
     public String toString() {

@@ -6,7 +6,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -24,9 +23,9 @@ public class Carnet {
     private BigDecimal price;
 
 
-    @NotNull (message = "Wybierz datę startu karnetu")
+    @NotNull(message = "Wybierz datę startu karnetu")
     @DateTimeFormat(pattern = "yyyy-MM-dd") //bez tego nie działa z formularzem dobrze
-    @FutureOrPresent (message = "nie możesz wybrać daty z przeszłości")
+    @FutureOrPresent(message = "nie możesz wybrać daty z przeszłości")
     private LocalDate startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -40,7 +39,7 @@ public class Carnet {
     // zajęcia z poziomu 1 najtańsze, zajęcia z poziomu 2 droższe. Mając 2 można wejść też na 1 ale nie odwrotnie
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @NotNull (message = "karnet musi by przypisany do użytkownika")
+    @NotNull(message = "karnet musi by przypisany do użytkownika")
     private User user;
     //jeden użytkownik może mieć wiele karnetów ale każdy karnet ma tylko jednego użytkownika
 

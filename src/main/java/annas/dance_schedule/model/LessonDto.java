@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 public class LessonDto {
     @NotBlank
     private String name;
-    /*@Range(min= 0 , max = 20)*/
+
     @NotNull
     private Integer slots;
 

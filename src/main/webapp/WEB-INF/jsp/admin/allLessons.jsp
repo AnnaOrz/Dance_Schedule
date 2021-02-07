@@ -1,15 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Zajęcia</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
+
 <body>
+
 <%@ include file="../fragments/topMenu.jsp" %>
 <%@ include file="menu.jsp" %>
+
 <h1> Zajęcia </h1>
 ${message}
+
 <a href='<c:url value="/dance/admin/lessons/add"/>'> Dodaj nowe zajęcia</a>
 <table class="table table-light table-striped">
     <thead>
@@ -26,10 +31,9 @@ ${message}
         <th scope="col">Trener</th>
         <th scope="col">Ilość uczestników</th>
         <th scope="col">Ilość miejsc</th>
-
-
     </tr>
     </thead>
+
     <c:forEach items="${allLessons}" var="lesson">
     <tr>
         <td> <a href='<c:url value="/dance/admin/lessons/cancel/${lesson.id}"/>'
@@ -45,9 +49,8 @@ ${message}
         <td>${lesson.trainer.lastName}</td>
         <td>${lesson.participants.size()}</td>
         <td>${lesson.slots}</td>
-
-
     </tr>
     </c:forEach>
+
 </body>
 </html>

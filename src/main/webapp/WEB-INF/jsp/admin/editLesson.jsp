@@ -1,10 +1,11 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Edycja lekcji</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1> Edycja lekcji </h1>
@@ -35,7 +36,7 @@
             <form:errors path="place"/></dd>
         <dt class="col-sm-3">Id trenera</dt>
         <dd class="col-sm-9">
-            <form:input path="trainer" type="number" value="${lesson.trainer.id}" required="true" /></dd>
+            <form:input path="trainer" type="number" value="${lesson.trainer.id}" required="true"/></dd>
         <dt class="col-sm-3">Poziom wejścia</dt>
         <dd class="col-sm-9">
             <form:input path="accessNumber" type="number" value="${lesson.accessNumber}"/>
@@ -48,3 +49,5 @@
 
     </dl>
 </form:form>
+</body>
+</html>

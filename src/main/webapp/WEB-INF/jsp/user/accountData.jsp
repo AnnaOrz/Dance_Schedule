@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Moje dane</title>
-    <meta charset="UTF-8">
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="../fragments/topMenu.jsp" %>

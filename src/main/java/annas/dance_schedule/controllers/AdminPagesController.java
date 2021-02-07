@@ -225,6 +225,7 @@ public class AdminPagesController {
         model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
         return "redirect:/dance/admin/carnetTypes";
     }
+
     @GetMapping("/carnets/edit/{id:[0-9]+}")
     public String editCarnetGoToForm(@PathVariable Long id, Model model) {
         if (carnetRepository.findById(id).isPresent()) {
@@ -236,6 +237,7 @@ public class AdminPagesController {
             return "admin/allCarnets";
         }
     }
+
     @PostMapping("/carnets/edit/{id:[0-9]+}")
     public String editCarnet(@ModelAttribute @Valid Carnet carnet, BindingResult result, Model model) {
         if (result.hasErrors()) {

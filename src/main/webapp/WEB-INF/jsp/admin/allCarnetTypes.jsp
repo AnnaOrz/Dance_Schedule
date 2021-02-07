@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Typy karnetów</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <h1> Typy karnetów </h1>
@@ -13,7 +14,10 @@
 
 ${message}
 <a href='<c:url value="/dance/admin/addCarnetType"/>'> Dodaj nowy karnet</a>
+
+
 <table class="table table-light table-striped">
+
     <thead>
     <tr>
         <th scope="col">Id typu</th>
@@ -40,8 +44,7 @@ ${message}
         <td><a href='<c:url value="/dance/admin/carnetTypes/edit/${carnetType.id}"/>'>Edytuj</a></td>
 
     </tr>
-
-
     </c:forEach>
+
 </body>
 </html>

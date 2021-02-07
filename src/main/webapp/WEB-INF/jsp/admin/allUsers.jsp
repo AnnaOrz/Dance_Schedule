@@ -1,15 +1,18 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Lista użytkowników</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="../fragments/topMenu.jsp" %>
 <%@ include file="menu.jsp" %>
+
 <h1> Lista użytkowników </h1>
 ${message}
+
 <table class="table table-light table-striped">
     <thead>
     <tr>
@@ -22,7 +25,8 @@ ${message}
         <th scope="col">Aktywowany</th>
     </tr>
     </thead>
-<c:forEach items="${allUsers}" var="user">
+
+    <c:forEach items="${allUsers}" var="user">
     <tr>
         <td><a href='<c:url value="/dance/admin/users/edit/${user.id}"/>'>Edytuj</a></td>
         <th scope="row">${user.id}</th>
@@ -32,10 +36,7 @@ ${message}
         <td>${user.role}</td>
         <td>${user.enabled}</td>
     </tr>
-
-
-</c:forEach>
-
+    </c:forEach>
 
 </body>
 </html>

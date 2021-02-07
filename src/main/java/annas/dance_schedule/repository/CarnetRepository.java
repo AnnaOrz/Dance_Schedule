@@ -9,15 +9,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
-public interface CarnetRepository extends JpaRepository <Carnet, Long> {
-    Optional<Carnet> findAllByExpireDateBefore(LocalDate activeTo);
-    Optional<Carnet> findAllByPrice(BigDecimal price);
+public interface CarnetRepository extends JpaRepository<Carnet, Long> {
+    List<Carnet> findAllByExpireDateBefore(LocalDate activeTo);
+
+    List<Carnet> findAllByExpireDateIsAfter(LocalDate expireAfter);
+
+    List<Carnet> findAllByStartDateAfter(LocalDate activeAfter);
+
+    List<Carnet> findAllByPrice(BigDecimal price);
+
     List<Carnet> findAllByUserId(Long userId);
+
     @Modifying
     @Transactional
     @Query("update Carnet c set c.accessNumber=?1, c.entrances=?2, c.expireDate=?3, " +
@@ -26,5 +30,6 @@ public interface CarnetRepository extends JpaRepository <Carnet, Long> {
                 BigDecimal price, LocalDate startDate, User user, Long id);
 
     List<Carnet> findAllByUserAndExpireDateAfter(User user, LocalDate date);
+
     List<Carnet> findAllByUserAndExpireDateBefore(User user, LocalDate date);
 }

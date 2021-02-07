@@ -1,15 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Edycja danych</title>
-    <meta charset="UTF-8">
-
-
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
+
 <body>
+
 <%@ include file="../fragments/topMenu.jsp" %>
 
 <form:form method="post" modelAttribute="user" >
@@ -37,5 +37,6 @@
         <form:input path="role" value="${user.role}" type="hidden" />
         <form:input path="enabled" value="${user.enabled}" type="hidden" />
 </form:form>
+
 </body>
 </html>

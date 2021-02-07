@@ -63,13 +63,15 @@ public class UserService {
                     user.getId());
         } else userRepository.save(user);
     }
-    public void activateUser(User user){
+
+    public void activateUser(User user) {
         user.setRole("USER");
         user.setEnabled(true);
         update(user);
     }
+
     @Transactional
-    public boolean addOneEntranceToUserProperCarnet(User user, Lesson lesson){
+    public boolean addOneEntranceToUserProperCarnet(User user, Lesson lesson) {
         List<Carnet> userProperCarnets = user.getCarnets().stream()
                 .filter(carnet -> carnet.getExpireDate().isAfter(lesson.getBeginTime().toLocalDate()))
                 .filter(carnet -> carnet.getEntrances() > 0)
@@ -84,7 +86,8 @@ public class UserService {
         carnet.setEntrances(carnet.getEntrances() + 1);
         return true;
     }
-    public String EncodeUserPassword(String password){
+
+    public String EncodeUserPassword(String password) {
         return passwordEncoder.encode(password);
     }
 

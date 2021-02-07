@@ -9,7 +9,6 @@ import annas.dance_schedule.repository.UserRepository;
 import annas.dance_schedule.services.LessonService;
 import annas.dance_schedule.services.UserService;
 import org.springframework.stereotype.Controller;
-
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
 
@@ -36,14 +33,15 @@ public class MainPageController {
         this.lessonRepository = lessonRepository;
         this.lessonService = lessonService;
     }
+
     @ResponseBody
     @RequestMapping("/denied")
-    public String denied(){
+    public String denied() {
         return "Nie masz dostępu do tej strony";
     }
 
     @RequestMapping("")
-    public String goToMain(){
+    public String goToMain() {
         return "mainPage";
     }
 
@@ -53,6 +51,7 @@ public class MainPageController {
         model.addAttribute("userDto", new UserDto());
         return "user/registrationForm";
     }
+
     @PostMapping("/registration")
     public String registerNewUser(@ModelAttribute @Valid UserDto userDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
@@ -68,27 +67,30 @@ public class MainPageController {
             }
         }
     }
+
     @GetMapping("/schedule")
-    public String goToSchedule(Model model){
+    public String goToSchedule(Model model) {
         lessonService.UpdateLessonsStatus();
         model.addAttribute("classes", lessonRepository.findLessonsByBeginTimeAfter(LocalDate.now().atStartOfDay()));
         return "/schedule";
     }
+
     @PostMapping("/schedule")
-    public String goToScheduleSearch(Model model, HttpServletRequest request){
+    public String goToScheduleSearch(Model model, HttpServletRequest request) {
         lessonService.UpdateLessonsStatus();
-        try{
-        LocalDate date = LocalDate.parse(request.getParameter("date"));
-        model.addAttribute("classes", lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23,59)));
-        System.out.println(lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23,59)).size());
-        return "/schedule";
-        } catch (DateTimeParseException dtE)  {
+        try {
+            LocalDate date = LocalDate.parse(request.getParameter("date"));
+            model.addAttribute("classes", lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23, 59)));
+            System.out.println(lessonRepository.findLessonsByBeginTimeBetween(date.atStartOfDay(), date.atTime(23, 59)).size());
+            return "/schedule";
+        } catch (DateTimeParseException dtE) {
             return "redirect:/schedule";
 
         }
     }
+
     @RequestMapping("/contact")
-    public String contact(){
+    public String contact() {
         return "/contact";
     }
 

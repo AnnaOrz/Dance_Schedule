@@ -94,10 +94,10 @@ public class UserController {
             System.out.println(result.getAllErrors().toString());
             return "user/editUser";
         }
-        if(!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())){
+        if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
             user.setPassword(userService.EncodeUserPassword(user.getPassword()));
         }
-            userService.update(user);
+        userService.update(user);
         return "user/accountData";
     }
 

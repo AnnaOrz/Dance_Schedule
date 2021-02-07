@@ -18,7 +18,7 @@ public class MyUserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return new ArrayList<>();
-        //Each user has only one role
+        //For our use each user has only one authority
     }
 
     @Override

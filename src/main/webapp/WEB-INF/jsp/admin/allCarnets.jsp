@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+
 <html>
 <head>
     <title>Karnety użytkowników</title>
+    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
 <%@ include file="../fragments/topMenu.jsp" %>
@@ -11,6 +12,7 @@
 <h1> Karnety użytkowników</h1>
 ${message}
 <table class="table table-light table-striped">
+
     <thead>
     <tr>
         <th scope="col">Id karnetu</th>
@@ -31,12 +33,8 @@ ${message}
         <td>${carnet.accessNumber}</td>
         <td>${carnet.user.email}</td>
         <td><a href='<c:url value="/dance/admin/carnets/edit/${carnet.id}"/>'>Edytuj</a></td>
-
     </tr>
-
-
     </c:forEach>
-
 
 </body>
 </html>

@@ -18,23 +18,25 @@ public class CarnetService {
         this.carnetRepository = carnetRepository;
         this.carnetTypeRepository = carnetTypeRepository;
     }
+
     @Transactional
     public void update(Carnet carnet) {
-            Optional<Carnet> oldCarnet = carnetRepository.findById(carnet.getId());
-            if(oldCarnet.isPresent()){
-                carnetRepository.update(
-                        carnet.getAccessNumber(),
-                        carnet.getEntrances(),
-                        carnet.getExpireDate(),
-                        carnet.getPrice(),
-                        carnet.getStartDate(),
-                        carnet.getUser(),
-                        carnet.getId());
-            } else carnetRepository.save(carnet);
-        }
+        Optional<Carnet> oldCarnet = carnetRepository.findById(carnet.getId());
+        if (oldCarnet.isPresent()) {
+            carnetRepository.update(
+                    carnet.getAccessNumber(),
+                    carnet.getEntrances(),
+                    carnet.getExpireDate(),
+                    carnet.getPrice(),
+                    carnet.getStartDate(),
+                    carnet.getUser(),
+                    carnet.getId());
+        } else carnetRepository.save(carnet);
+    }
+
     @Transactional
     public void update(CarnetType carnetType) {
-        if(carnetRepository.findById(carnetType.getId()).isPresent()){
+        if (carnetRepository.findById(carnetType.getId()).isPresent()) {
             carnetTypeRepository.update(
                     carnetType.getAccessNumber(),
                     carnetType.getEntrances(),

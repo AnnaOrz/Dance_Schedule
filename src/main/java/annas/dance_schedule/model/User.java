@@ -1,12 +1,8 @@
 package annas.dance_schedule.model;
 
-
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -15,30 +11,30 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull (message="pole nie może być puste")
+    @NotNull(message = "pole nie może być puste")
     private boolean enabled;
-    
+
     @Email
     @Column(unique = true)
-    @NotBlank (message="pole nie może być puste")
+    @NotBlank(message = "pole nie może być puste")
     private String email;
 
     private String role;
 
-    @NotBlank (message="pole nie może być puste")
+    @NotBlank(message = "pole nie może być puste")
     private String password;
 
     @Transient
     private String passwordConfirm;
 
 
-    @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy="user")
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "user")
     private List<Carnet> carnets;
 
-    @ManyToMany (cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Lesson> classesParticipating;
 
     private String firstName;
@@ -75,7 +71,6 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
 
     public String getPassword() {
