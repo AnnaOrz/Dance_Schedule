@@ -1,5 +1,7 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+<sec:authentication var="principal" property="principal"/>
 <html>
 
 <body>

@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <html>
@@ -7,7 +7,7 @@
     <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
-<%@ include file="../fragments/topMenu.jsp" %>
+<%@ include file="../fragments/userMenu.jsp" %>
 <h1> Moje dane </h1>
 <dl class="row">
     <dt class="col-sm-3">Imię</dt>

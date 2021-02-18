@@ -17,7 +17,7 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     @Modifying
     @Transactional
-    @Query("UPDATE Lesson c SETc.name = ?1, c.beginTime = ?2, c.state= ?3, " +
+    @Query("UPDATE Lesson c SET c.name = ?1, c.beginTime = ?2, c.state= ?3, " +
             "c.slots=?4, c.accessNumber= ?5, c.level=?6, c.place=?7, c.trainer=?8 WHERE c.id = ?9")
     void update(String name, LocalDateTime beginTime, String state, Integer slots,
                 Integer accessNumber, String level, String place, User trainer, Long id);

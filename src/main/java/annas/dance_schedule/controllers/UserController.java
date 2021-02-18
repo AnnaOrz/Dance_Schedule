@@ -243,6 +243,6 @@ public class UserController {
         }
         User user = userRepository.findById(id).get();
         userService.activateUser(user);
-        return "/dance/user";
+        return "redirect:/schedule";
     }
 }
