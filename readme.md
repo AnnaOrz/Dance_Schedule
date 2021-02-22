@@ -1,4 +1,5 @@
 Technologies used: Spring, Hibernate, JSP
+
 Purpose: Imagine you are owner of new dance school or fitness club. 
 You want your clients to easily sign in for classes online.
 They need to buy a carnet with entrances and from active carnet one entrance is collected when user sign up for any class. 
