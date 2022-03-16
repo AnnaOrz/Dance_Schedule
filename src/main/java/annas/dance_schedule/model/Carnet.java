@@ -24,7 +24,7 @@ public class Carnet {
 
 
     @NotNull(message = "Wybierz datę startu karnetu")
-    @DateTimeFormat(pattern = "yyyy-MM-dd") //bez tego nie działa z formularzem dobrze
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @FutureOrPresent(message = "nie możesz wybrać daty z przeszłości")
     private LocalDate startDate;
 

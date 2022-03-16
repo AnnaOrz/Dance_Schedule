@@ -10,22 +10,20 @@ import java.math.BigDecimal;
 
 @Entity
 public class CarnetType {
+    // CarnetType is offer in studio. In spite of Carnet it has no start/expiry date and no User
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    private Integer entrances;
-    @NotNull
-    private BigDecimal price;
-    @NotNull
-    private Integer accessNumber;
+    @NotNull private Integer entrances;
+    @NotNull private BigDecimal price;
+    @NotNull private Integer accessNumber;
+    /* cheaper classes - 1 , extended classes - 2 ,
+    accessNumber in carnet must be the same as accesN in class or user can't reserve a place. */
 
-    @NotNull
-    private String description;
-    @NotNull
-    boolean isAvailable;
+    @NotNull private String description;
+    @NotNull boolean isAvailable;
     //true will be available to buy by users
 
     public Long getId() {

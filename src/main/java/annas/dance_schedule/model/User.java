@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -22,7 +23,8 @@ public class User {
     @NotBlank(message = "pole nie może być puste")
     private String email;
 
-    private String role;
+    @ManyToMany
+    private Collection<Role> roles;
 
     @NotBlank(message = "pole nie może być puste")
     private String password;
@@ -39,6 +41,7 @@ public class User {
 
     private String firstName;
     private String lastName;
+
 
     public List<Lesson> getClassesParticipating() {
         return classesParticipating;
@@ -89,13 +92,6 @@ public class User {
         this.enabled = enabled;
     }
 
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 
     public String getPasswordConfirm() {
         return passwordConfirm;
@@ -123,5 +119,13 @@ public class User {
 
     public void addCarnet(Carnet carnet) {
         carnets.add(carnet);
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

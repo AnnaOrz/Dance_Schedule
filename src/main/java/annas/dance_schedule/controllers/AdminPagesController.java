@@ -62,7 +62,7 @@ public class AdminPagesController {
 
     @ModelAttribute("allTrainers")
     public List<User> allTrainers() {
-        return userRepository.findAllByRole("TRAINER");
+        return userRepository.findAllByRoles(new Role("ROLE_TRAINER"));
     }
 
 

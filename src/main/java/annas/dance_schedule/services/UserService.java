@@ -1,18 +1,13 @@
 package annas.dance_schedule.services;
 
 import annas.dance_schedule.exceptions.UserAlreadyExistException;
-import annas.dance_schedule.model.Carnet;
-import annas.dance_schedule.model.Lesson;
-import annas.dance_schedule.model.User;
-import annas.dance_schedule.model.UserDto;
+import annas.dance_schedule.model.*;
 import annas.dance_schedule.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,7 +35,9 @@ public class UserService {
             user.setLastName(userDto.getLastName());
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             user.setEnabled(false);
-            user.setRole("USER");
+            Collection<Role> userRoles = new LinkedList<>();
+            userRoles.add(new Role("ROLE_USER"));
+            user.setRoles(userRoles);
             return user;
         }
     }
@@ -55,7 +52,7 @@ public class UserService {
         if (oldUser.isPresent()) {
             userRepository.updateUser(
                     user.getEmail(),
-                    user.getRole(),
+                    user.getRoles(),
                     user.isEnabled(),
                     user.getFirstName(),
                     user.getLastName(),
@@ -65,7 +62,9 @@ public class UserService {
     }
 
     public void activateUser(User user) {
-        user.setRole("USER");
+        Collection<Role> userRoles = new LinkedList<>();
+        userRoles.add(new Role("ROLE_USER"));
+        user.setRoles(userRoles);
         user.setEnabled(true);
         update(user);
     }
