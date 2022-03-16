@@ -17,6 +17,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     List<User> findAllByRoles(Role role);
 
+
     @Modifying
     @Transactional
     @Query("UPDATE User u SET u.classesParticipating = ?1 WHERE u.id = ?2")

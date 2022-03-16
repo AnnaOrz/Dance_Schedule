@@ -36,7 +36,7 @@ public class UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
             user.setEnabled(false);
             Collection<Role> userRoles = new LinkedList<>();
-            userRoles.add(new Role("ROLE_USER"));
+            userRoles.add(new Role("USER"));
             user.setRoles(userRoles);
             return user;
         }
@@ -63,10 +63,17 @@ public class UserService {
 
     public void activateUser(User user) {
         Collection<Role> userRoles = new LinkedList<>();
-        userRoles.add(new Role("ROLE_USER"));
+        userRoles.add(new Role("USER"));
         user.setRoles(userRoles);
         user.setEnabled(true);
         update(user);
+    }
+    public Optional<User> findUserById(Integer id){
+        return userRepository.findById((id.longValue()));
+    }
+
+    public void saveAutomaticUser(User user){
+        userRepository.save(user);
     }
 
     @Transactional
@@ -86,9 +93,14 @@ public class UserService {
         return true;
     }
 
-    public String EncodeUserPassword(String password) {
+    public String encodeUserPassword(String password) {
         return passwordEncoder.encode(password);
     }
+
+
+
+
+
 
 }
 

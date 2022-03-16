@@ -171,7 +171,7 @@ public class AdminPagesController {
             return "admin/editUser";
         }
         if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
-            user.setPassword(userService.EncodeUserPassword(user.getPassword()));
+            user.setPassword(userService.encodeUserPassword(user.getPassword()));
         }
         userService.update(user);
         return "redirect:/dance/admin/users";
