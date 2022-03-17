@@ -11,7 +11,7 @@
 <%@ include file="menu.jsp" %>
 <h1> Karnety użytkowników</h1>
 ${message}
-<table class="table table-light table-striped">
+<table class="table-basic">
 
     <thead>
     <tr>

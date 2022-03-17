@@ -10,9 +10,6 @@
 </head>
 
 <body>
-<sec:authorize access="hasAuthority('ADMIN')">
-    <%@ include file="./admin/menu.jsp" %>
-</sec:authorize>
 
 <sec:authorize access="isAuthenticated()">
     <%@ include file="fragments/userMenu.jsp" %>
@@ -22,19 +19,23 @@
     <%@ include file="fragments/topMenu.jsp" %>
 </sec:authorize>
 
-${message.toString()}
-<form class="d-flex" method="post">
-    <div>
-        <input class="form-control me-2" type="date" placeholder="Search" aria-label="Search" name="date">
+<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+        <%@ include file="./admin/menu.jsp" %>
+</sec:authorize>
+
+<div class="message">${message.toString()} </div>
+
+<form method="post">
+    <div class="schedule-search">
+        <input type="date" placeholder="Search" name="date" id="schedule-search=date"/>
         <input type="hidden"
                name="${_csrf.parameterName}"
                value="${_csrf.token}"/>
-
-        <button class="btn btn-outline-success" type="submit"> Wybierz zajęcia według daty</button>
+        <button type="submit"> Wybierz zajęcia według daty</button>
     </div>
 </form>
 
-<table class="table table-light table-striped">
+<table class="schedule">
     <thead>
     <tr>
         <th scope="col"></th>
@@ -70,4 +71,7 @@ ${message.toString()}
 </table>
 
 </body>
+<script>
+    document.getElementById('schedule-search=date').value = new Date().toISOString().substring(0, 10);
+</script>
 </html>

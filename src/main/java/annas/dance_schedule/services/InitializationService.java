@@ -27,12 +27,14 @@ public class InitializationService {
     }
     @PostConstruct
     private void addRoles(){
-        Role roleAdmin = new Role("ROLE_ADMIN");
-        Role roleUser = new Role("ROLE_USER");
-        Role roleTrainer = new Role("ROLE_TRAINER");
-        roleRepository.saveAndFlush(roleAdmin);
-        roleRepository.saveAndFlush(roleUser);
-        roleRepository.saveAndFlush(roleTrainer);
+        if(false) {
+            Role roleAdmin = new Role("ROLE_ADMIN");
+            Role roleUser = new Role("ROLE_USER");
+            Role roleTrainer = new Role("ROLE_TRAINER");
+            roleRepository.saveAndFlush(roleAdmin);
+            roleRepository.saveAndFlush(roleUser);
+            roleRepository.saveAndFlush(roleTrainer);
+        }
 
     }
 
@@ -49,7 +51,7 @@ public class InitializationService {
             Collection<Role> userRoles = new LinkedList<>();
             userRoles.add(roleRepository.findByName("ROLE_ADMIN").get());
             user.setRoles(userRoles);
-            userservice.saveAutomaticUser(user);
+            userservice.saveUser(user);
         }
 
     }

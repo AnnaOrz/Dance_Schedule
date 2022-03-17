@@ -1,10 +1,12 @@
 package annas.dance_schedule.model;
 
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 
 public class MyUserPrincipal implements UserDetails {
@@ -15,10 +17,23 @@ public class MyUserPrincipal implements UserDetails {
         this.user = user;
     }
 
+    private Collection<? extends GrantedAuthority> getAuthorities(
+            Collection<Role> roles) {
+        List<GrantedAuthority> authorities
+                = new ArrayList<>();
+        for (Role role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            role.getPrivileges().stream()
+                    .map(p -> new SimpleGrantedAuthority(p.getName()))
+                    .forEach(authorities::add);
+        }
+
+        return authorities;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return new ArrayList<>();
-        //For our use each user has only one authority
+        return this.getAuthorities(user.getRoles());
     }
 
     @Override

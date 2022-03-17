@@ -25,7 +25,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication().dataSource(dataSource)
-                .authoritiesByUsernameQuery("select email, roles from users where email=?")
+                .authoritiesByUsernameQuery("SELECT u.email, r.name FROM users u INNER JOIN users_roles ur ON u.id = ur.users_id INNER JOIN role r on ur.roles_id = r.id WHERE u.email=?")
                 .usersByUsernameQuery("select email, password, enabled from users where email=?");
 
 
@@ -46,7 +46,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/dance/**").hasAnyAuthority("USER", "ADMIN", "TRAINER")
+                .antMatchers("/dance/**").hasAnyRole("USER", "ADMIN", "TRAINER")
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .and().formLogin().permitAll()
                 .defaultSuccessUrl("/schedule", true)

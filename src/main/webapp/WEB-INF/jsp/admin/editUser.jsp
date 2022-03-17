@@ -32,17 +32,15 @@
     <dd class="col-sm-9">
         <form:input path="password" type="password" value="${user.password}"/>
         <form:errors path="password"/></dd>
-    <dt class="col-sm-3">Rola</dt>
-    <dd class="col-sm-9">
-        <form:input path="role" value="${user.role}"/>
-        <form:errors path="role"/></dd>
 
     <dt class="col-sm-3">Aktywowany</dt>
     <dd class="col-sm-9">
         <form:select items="${enabled}" path="enabled" value="${user.enabled}"/>
         <form:errors path="enabled"/></dd>
     <dt class="col-sm-3">
-        <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz zmiany"></dt>
+        <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz zmiany">
+    </dt>
+
     </form:form>
 </body>
 </html>

@@ -127,4 +127,7 @@ public class LessonService {
         todayLessons.sort(Comparator.comparing(Lesson::getBeginTime));
         return todayLessons;
     }
+    public void saveLesson (Lesson lesson) {
+        lessonRepository.saveAndFlush(lesson);
+    }
 }

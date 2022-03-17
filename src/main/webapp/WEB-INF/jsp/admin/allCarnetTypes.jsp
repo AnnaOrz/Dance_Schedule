@@ -7,16 +7,15 @@
     <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
 </head>
 <body>
-<h1> Typy karnetów </h1>
 
 <%@ include file="../fragments/topMenu.jsp" %>
 <%@ include file="menu.jsp" %>
-
+<h1> Typy karnetów </h1>
 ${message}
 <a href='<c:url value="/dance/admin/addCarnetType"/>'> Dodaj nowy karnet</a>
 
 
-<table class="table table-light table-striped">
+<table class="table-basic">
 
     <thead>
     <tr>

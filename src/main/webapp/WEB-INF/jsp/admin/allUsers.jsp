@@ -13,7 +13,7 @@
 <h1> Lista użytkowników </h1>
 ${message}
 
-<table class="table table-light table-striped">
+<table class="table-basic">
     <thead>
     <tr>
         <th scope="col">Edycja użytkownika</th>
@@ -33,7 +33,7 @@ ${message}
         <td>${user.email}</td>
         <td>${user.firstName}</td>
         <td>${user.lastName}</td>
-        <td>${user.role}</td>
+        <td>${user.roles}</td>
         <td>${user.enabled}</td>
     </tr>
     </c:forEach>

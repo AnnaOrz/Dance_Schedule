@@ -1,10 +1,7 @@
 package annas.dance_schedule.controllers;
 
 import annas.dance_schedule.model.*;
-import annas.dance_schedule.repository.CarnetRepository;
-import annas.dance_schedule.repository.CarnetTypeRepository;
-import annas.dance_schedule.repository.LessonRepository;
-import annas.dance_schedule.repository.UserRepository;
+import annas.dance_schedule.repository.*;
 import annas.dance_schedule.services.CarnetService;
 import annas.dance_schedule.services.LessonService;
 import annas.dance_schedule.services.UserService;
@@ -15,21 +12,27 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/dance/admin")
 public class AdminPagesController {
+
+    private final LessonService lessonService;
+    private final UserService userService;
+    private final CarnetService carnetService;
+    private final RoleRepository roleRepository;
+
     private final CarnetTypeRepository carnetTypeRepository;
     private final CarnetRepository carnetRepository;
     private final UserRepository userRepository;
     private final LessonRepository lessonRepository;
-    private final LessonService lessonService;
-    private final UserService userService;
-    private final CarnetService carnetService;
+    // TODO: pozbyć się stąd repo!!! dostęp z poziomu serwisów, tylko!
 
-    public AdminPagesController(CarnetTypeRepository carnetTypeRepository, CarnetRepository carnetRepository, UserRepository userRepository, LessonRepository lessonRepository, LessonService lessonService, UserService userService, CarnetService carnetService) {
+    public AdminPagesController(CarnetTypeRepository carnetTypeRepository, CarnetRepository carnetRepository, UserRepository userRepository, LessonRepository lessonRepository, LessonService lessonService, UserService userService, CarnetService carnetService, RoleRepository roleRepository) {
         this.carnetTypeRepository = carnetTypeRepository;
         this.carnetRepository = carnetRepository;
         this.userRepository = userRepository;
@@ -37,6 +40,8 @@ public class AdminPagesController {
         this.lessonService = lessonService;
         this.userService = userService;
         this.carnetService = carnetService;
+
+        this.roleRepository = roleRepository;
     }
 
 
@@ -52,7 +57,7 @@ public class AdminPagesController {
 
     @ModelAttribute("allUsers")
     public List<User> allUsers() {
-        return userRepository.findAll();
+        return userService.findAllUsers();
     }
 
     @ModelAttribute("allLessons")
@@ -62,7 +67,14 @@ public class AdminPagesController {
 
     @ModelAttribute("allTrainers")
     public List<User> allTrainers() {
-        return userRepository.findAllByRoles(new Role("ROLE_TRAINER"));
+        Optional<Role> trainer = roleRepository.findByName("ROLE_TRAINER");
+        if(trainer.isPresent()){
+            return userRepository.findAllByRoles(trainer.get());
+        } else {
+            System.out.println("Uwaga, nie znaleziono roli: ROLE_TRAINER");
+            return new ArrayList<User>();
+        }
+
     }
 
 
@@ -90,7 +102,8 @@ public class AdminPagesController {
             return "admin/addCarnetType";
         } else {
             carnetType.setDescription(carnetType.getDescription()
-                    + " cena: " + carnetType.getPrice() + " ilość wejść: " + carnetType.getEntrances());
+                    + "\n" + " cena: " + carnetType.getPrice()
+                    + "\n" + " ilość wejść: " + carnetType.getEntrances());
             carnetTypeRepository.save(carnetType);
             model.addAttribute("message", "zapisałem nowy typ karnetu");
             model.addAttribute("carnetTypes", carnetTypeRepository.findAll());
@@ -115,17 +128,19 @@ public class AdminPagesController {
         if (result.hasErrors()) {
             return "admin/addNewLesson";
         }
+        try{
         Lesson lesson = new Lesson();
         lesson.setState("active");
         lesson.setSlots(lessonDto.getSlots());
         lesson.setAccessNumber(lessonDto.getAccessNumber());
         lesson.setBeginTime(lessonDto.getBeginTime());
-        lesson.setTrainer(userRepository.getOne(lessonDto.getTrainerId()));
+        lesson.setTrainer(userService.findUserById(lessonDto.getTrainerId()));
         lesson.setPlace(lessonDto.getPlace());
         lesson.setLevel(lessonDto.getLevel());
         lesson.setName(lessonDto.getName());
-        lessonRepository.save(lesson);
+        lessonService.saveLesson(lesson);
         System.out.println("Zapisałem leckję");
+        } catch (Exception ex) { ex.printStackTrace();}
         return "redirect:/dance/admin/lessons";
     }
 
@@ -173,7 +188,12 @@ public class AdminPagesController {
         if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
             user.setPassword(userService.encodeUserPassword(user.getPassword()));
         }
-        userService.update(user);
+        user.setRoles(userRepository.getOne(user.getId()).getRoles());
+        // TODO role już nie są stringiem i nie interesuje nas ich zmiana w tym momencie,
+        // zapis nie działa z powodu tego że rola jest podawana jako string a nie kolekcja w POST,
+        // sugerowane: nowe DTO
+
+        userService.updateUser(user);
         return "redirect:/dance/admin/users";
     }
 

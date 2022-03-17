@@ -31,7 +31,7 @@ public class CarnetService {
                     carnet.getStartDate(),
                     carnet.getUser(),
                     carnet.getId());
-        } else carnetRepository.save(carnet);
+        }
     }
 
     @Transactional
@@ -45,6 +45,6 @@ public class CarnetService {
                     carnetType.isAvailable(),
                     carnetType.getId());
 
-        } else carnetTypeRepository.save(carnetType);
+        }
     }
 }

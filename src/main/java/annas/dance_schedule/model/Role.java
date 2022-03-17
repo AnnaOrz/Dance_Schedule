@@ -1,6 +1,5 @@
 package annas.dance_schedule.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -67,11 +66,6 @@ public class Role {
 
     @Override
     public String toString() {
-        return "Role{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", users=" + users +
-                ", privileges=" + privileges +
-                '}';
+        return this.getName() + " ";
     }
 }

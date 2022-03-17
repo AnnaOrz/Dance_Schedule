@@ -8,7 +8,6 @@
 </head>
 
 <body>
-
 <%@ include file="../fragments/topMenu.jsp" %>
 <%@ include file="menu.jsp" %>
 
@@ -16,7 +15,7 @@
 ${message}
 
 <a href='<c:url value="/dance/admin/lessons/add"/>'> Dodaj nowe zajęcia</a>
-<table class="table table-light table-striped">
+<table class="table-basic">
     <thead>
     <tr>
         <th scope="col"></th>

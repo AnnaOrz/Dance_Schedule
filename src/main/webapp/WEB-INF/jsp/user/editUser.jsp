@@ -34,7 +34,7 @@
 
     <dt class="col-sm-3">
         <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz zmiany"> </dt>
-        <form:input path="role" value="${user.role}" type="hidden" />
+        <form:input path="roles" value="${user.roles}" type="hidden" />
         <form:input path="enabled" value="${user.enabled}" type="hidden" />
 </form:form>
 

@@ -97,7 +97,7 @@ public class UserController {
         if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
             user.setPassword(userService.encodeUserPassword(user.getPassword()));
         }
-        userService.update(user);
+        userService.updateUser(user);
         return "user/accountData";
     }
 
