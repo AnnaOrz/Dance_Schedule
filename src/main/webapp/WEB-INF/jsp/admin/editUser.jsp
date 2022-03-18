@@ -13,32 +13,28 @@
 <%@ include file="../fragments/topMenu.jsp" %>
 <%@ include file="menu.jsp" %>
 
-<form:form method="post" modelAttribute="user">
-<dl class="row">
-    <dt class="col-sm-3">Imię</dt>
-    <dd class="col-sm-9">
-        <form:input path="firstName" value="${user.firstName}"/>
+<form:form method="post" modelAttribute="userDto">
+<dl>
+    <dt >Imię</dt>
+    <dd>
+        <form:input path="firstName" value="${oldFirstName}"/>
         <form:errors path="firstName"/></dd>
-    <dt class="col-sm-3">Nazwisko:</dt>
-    <dd class="col-sm-9">
-        <form:input path="lastName" value="${user.lastName}"/>
+    <dt>Nazwisko:</dt>
+    <dd>
+        <form:input path="lastName" value="${oldLastName}"/>
         <form:errors path="lastName"/></dd>
-    <dt class="col-sm-3">Email</dt>
-    <dd class="col-sm-9">
-        <form:input path="email" value="${user.email}"/>
+    <dt>Email</dt>
+    <dd>
+        <form:input path="email" value="${oldEmail}"/>
         <form:errors path="email"/></dd>
 
-    <dt class="col-sm-3">Hasło</dt>
-    <dd class="col-sm-9">
-        <form:input path="password" type="password" value="${user.password}"/>
-        <form:errors path="password"/></dd>
 
-    <dt class="col-sm-3">Aktywowany</dt>
-    <dd class="col-sm-9">
-        <form:select items="${enabled}" path="enabled" value="${user.enabled}"/>
+    <dt>Aktywowany</dt>
+    <dd>
+        <form:select items="${enabled}" path="enabled" value="true"/>
         <form:errors path="enabled"/></dd>
-    <dt class="col-sm-3">
-        <input class="btn btn-outline-primary btn-lg" type="submit" value="Zapisz zmiany">
+    <dt>
+        <input type="submit" value="Zapisz zmiany">
     </dt>
 
     </form:form>

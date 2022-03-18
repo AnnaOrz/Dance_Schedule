@@ -3,7 +3,7 @@ package annas.dance_schedule.controllers;
 
 import annas.dance_schedule.exceptions.UserAlreadyExistException;
 import annas.dance_schedule.model.User;
-import annas.dance_schedule.model.UserDto;
+import annas.dance_schedule.model.UserRegistrationDto;
 import annas.dance_schedule.repository.LessonRepository;
 import annas.dance_schedule.repository.UserRepository;
 import annas.dance_schedule.services.LessonService;
@@ -48,17 +48,17 @@ public class MainPageController {
 
     @GetMapping("/registration")
     public String showRegistrationForm(Model model) {
-        model.addAttribute("userDto", new UserDto());
+        model.addAttribute("userRegistrationDto", new UserRegistrationDto());
         return "user/registrationForm";
     }
 
     @PostMapping("/registration")
-    public String registerNewUser(@ModelAttribute @Valid UserDto userDto, BindingResult result, Model model) {
+    public String registerNewUser(@ModelAttribute @Valid UserRegistrationDto userRegistrationDto, BindingResult result, Model model) {
         if (result.hasErrors()) {
             return "user/registrationForm";
         } else {
             try {
-                User user = userService.registerNewUserAccount(userDto);
+                User user = userService.registerNewUserAccount(userRegistrationDto);
                 userRepository.save(user);
                 return "mainPage";
             } catch (UserAlreadyExistException e) {

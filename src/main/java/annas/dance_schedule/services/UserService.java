@@ -24,19 +24,19 @@ public class UserService {
     }
 
     @Transactional
-    public User registerNewUserAccount(UserDto userDto)
+    public User registerNewUserAccount(UserRegistrationDto userRegistrationDto)
             throws UserAlreadyExistException {
 
-        if (isEmailAlreadyInUse(userDto.getEmail())) {
+        if (isEmailAlreadyInUse(userRegistrationDto.getEmail())) {
             throw new UserAlreadyExistException(
                     "There is an account with that email address: "
-                            + userDto.getEmail());
+                            + userRegistrationDto.getEmail());
         } else {
             User user = new User();
-            user.setEmail(userDto.getEmail());
-            user.setFirstName(userDto.getFirstName());
-            user.setLastName(userDto.getLastName());
-            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+            user.setEmail(userRegistrationDto.getEmail());
+            user.setFirstName(userRegistrationDto.getFirstName());
+            user.setLastName(userRegistrationDto.getLastName());
+            user.setPassword(passwordEncoder.encode(userRegistrationDto.getPassword()));
             user.setEnabled(false);
             Collection<Role> userRoles = new LinkedList<>();
             userRoles.add(new Role("USER"));
@@ -55,7 +55,6 @@ public class UserService {
         if (oldUser.isPresent()) {
             userRepository.updateUser(
                     user.getEmail(),
-                    user.getRoles(),
                     user.isEnabled(),
                     user.getFirstName(),
                     user.getLastName(),

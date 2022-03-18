@@ -1,5 +1,6 @@
 package annas.dance_schedule.controllers;
 
+import annas.dance_schedule.exceptions.UserNotFoundException;
 import annas.dance_schedule.model.*;
 import annas.dance_schedule.repository.*;
 import annas.dance_schedule.services.CarnetService;
@@ -170,31 +171,47 @@ public class AdminPagesController {
 
     @GetMapping("/users/edit/{id:[0-9]+}")
     public String editUserGoToForm(@PathVariable Long id, Model model) {
-        if (userRepository.findById(id).isEmpty()) {
+        try {
+            User userOldData = userService.findUserById(id);
+            model.addAttribute("oldFirstName", userOldData.getFirstName());
+            model.addAttribute("oldLastName", userOldData.getLastName());
+            model.addAttribute("oldEmail", userOldData.getEmail());
+            model.addAttribute("userDto", new UserUpdateDataDto());
+            model.addAttribute("enabled", Arrays.asList("true", "false"));
+            return "admin/editUser";
+        } catch (UserNotFoundException ex){
             model.addAttribute("message", "nie znalazłem takiego użytkownika");
+            ex.printStackTrace();
             return "admin/allUsers";
         }
-        model.addAttribute("user", userRepository.findById(id).get());
-        List<String> enabled = Arrays.asList("true", "false");
-        model.addAttribute("enabled", enabled);
-        return "admin/editUser";
+
     }
 
     @PostMapping("/users/edit/{id:[0-9]+}")
-    public String editUser(@ModelAttribute @Valid User user, BindingResult result) {
+    public String editUser(@PathVariable Long id, @ModelAttribute @Valid UserUpdateDataDto user, BindingResult result) {
         if (result.hasErrors()) {
             return "admin/editUser";
         }
-        if (!user.getPassword().equals(userRepository.getOne(user.getId()).getPassword())) {
-            user.setPassword(userService.encodeUserPassword(user.getPassword()));
-        }
-        user.setRoles(userRepository.getOne(user.getId()).getRoles());
-        // TODO role już nie są stringiem i nie interesuje nas ich zmiana w tym momencie,
-        // zapis nie działa z powodu tego że rola jest podawana jako string a nie kolekcja w POST,
-        // sugerowane: nowe DTO
+        try {
+            User userToUpdate = userService.findUserById(id);
+            userToUpdate.setEmail(user.getEmail());
+            userToUpdate.setFirstName(user.getFirstName());
+            userToUpdate.setLastName(user.getLastName());
+            userToUpdate.setPassword(userService.findUserById(id).getPassword());
+            userService.updateUser(userToUpdate);
 
-        userService.updateUser(user);
+            /*userToUpdate.setRoles(userRepository.getOne(user.getId()).getRoles());*/
+            // sprawdzić czy role się nie kasują
+
+        } catch (UserNotFoundException ex) {
+            ex.printStackTrace();
+            return "admin/editUser";
+        }
         return "redirect:/dance/admin/users";
+
+
+        // TODO role już nie są stringiem i nie interesuje nas ich zmiana w tym momencie,
+
     }
 
     @GetMapping("/lessons/edit/{id:[0-9]+}")

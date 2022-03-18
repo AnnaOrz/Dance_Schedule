@@ -12,19 +12,19 @@
 
 <div class="alert-warning"> ${message} </div>
 
-<form:form method="post" modelAttribute="userDto">
+<form:form method="post" modelAttribute="userRegistrationDto">
 <dl class="row">
     <dt class="col-sm-3">Imię</dt>
     <dd class="col-sm-9">
-        <form:input path="firstName" value="${userDto.firstName}"/>
+        <form:input path="firstName" value="${userRegistrationDto.firstName}"/>
         <form:errors path="firstName"/></dd>
     <dt class="col-sm-3">Nazwisko:</dt>
     <dd class="col-sm-9">
-        <form:input path="lastName" value="${userDto.lastName}"/>
+        <form:input path="lastName" value="${userRegistrationDto.lastName}"/>
         <form:errors path="lastName"/></dd>
     <dt class="col-sm-3">Email</dt>
     <dd class="col-sm-9">
-        <form:input path="email" value="${userDto.email}"/>
+        <form:input path="email" value="${userRegistrationDto.email}"/>
         <form:errors path="email"/></dd>
 
     <dt class="col-sm-3">Hasło</dt>

@@ -27,7 +27,7 @@ public class InitializationService {
     }
     @PostConstruct
     private void addRoles(){
-        if(false) {
+        if(roleRepository.findAll().size() < 2) {
             Role roleAdmin = new Role("ROLE_ADMIN");
             Role roleUser = new Role("ROLE_USER");
             Role roleTrainer = new Role("ROLE_TRAINER");
