@@ -2,7 +2,9 @@ package annas.dance_schedule.services;
 
 import annas.dance_schedule.exceptions.UserAlreadyExistException;
 import annas.dance_schedule.exceptions.UserNotFoundException;
+import annas.dance_schedule.exceptions.roleNotExistException;
 import annas.dance_schedule.model.*;
+import annas.dance_schedule.repository.RoleRepository;
 import annas.dance_schedule.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final CarnetService carnetService;
+    private final RoleRepository roleRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CarnetService carnetService) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, CarnetService carnetService, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.carnetService = carnetService;
+        this.roleRepository = roleRepository;
     }
 
     @Transactional
@@ -84,6 +88,12 @@ public class UserService {
     public List<User> findAllWithRole(Role role){
         return userRepository.findAllByRoles(role);
     }
+    public User findUserByEmail(String email) throws UserNotFoundException {
+        Optional <User> user =  userRepository.findByEmail(email);
+        if(user.isPresent()){
+            return user.get();
+        } else throw new UserNotFoundException();
+    }
 
     public void saveUser(User user){
         userRepository.save(user);
@@ -112,6 +122,15 @@ public class UserService {
 
     public String encodeUserPassword(String password) {
         return passwordEncoder.encode(password);
+    }
+
+    public Role getRoleByName(String roleName) throws roleNotExistException {
+        Optional<Role> role = roleRepository.findByName(roleName);
+        if(role.isPresent()) {
+            return role.get();
+        }
+        else throw new roleNotExistException();
+
     }
 
 

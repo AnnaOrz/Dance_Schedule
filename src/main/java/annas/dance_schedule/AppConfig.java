@@ -34,7 +34,7 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UserConverter getAuthorConverter() {
+    public UserConverter getUserConverter() {
         return new UserConverter();
     }
 

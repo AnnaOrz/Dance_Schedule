@@ -15,6 +15,10 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
 
     List<Lesson> findLessonsByBeginTimeAfter(LocalDateTime localDateTime);
 
+    List<Lesson> findLessonsByParticipantsIsContaining(User user);
+
+    List<Lesson> findLessonsByBeginTimeBetween(LocalDateTime start, LocalDateTime end);
+
     @Modifying
     @Transactional
     @Query("UPDATE Lesson c SET c.name = ?1, c.beginTime = ?2, c.state= ?3, " +
@@ -27,13 +31,13 @@ public interface LessonRepository extends JpaRepository<Lesson, Long> {
     @Query(value = "INSERT INTO users_classes_participating (participants_id, classes_participating_id) VALUES (?,?)", nativeQuery = true)
     void insertParticipant(Long participantsId, Long lessonId);
 
-    List<Lesson> findLessonsByParticipantsIsContaining(User user);
+
 
     @Modifying
     @Transactional
     @Query(value = "DELETE FROM users_classes_participating WHERE participants_id=? AND classes_participating_id=?", nativeQuery = true)
     void deleteParticipant(Long participantsId, Long lessonId);
 
-    List<Lesson> findLessonsByBeginTimeBetween(LocalDateTime start, LocalDateTime end);
+
 
 }

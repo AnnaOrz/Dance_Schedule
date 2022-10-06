@@ -19,10 +19,11 @@ public class Lesson {
     @NotBlank
     private String name;
     /*@Range(min= 0 , max = 20)*/
+
     @NotNull
     private Integer slots;
 
-    private String place;
+
     @NotNull
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime beginTime;
@@ -38,9 +39,12 @@ public class Lesson {
     @ManyToMany(mappedBy = "classesParticipating", cascade = CascadeType.ALL)
     private List<User> participants;
 
+    private String place;
 
     @ManyToOne
     private User trainer;
+
+
 
     public Long getId() {
         return id;

@@ -99,6 +99,7 @@ public class UserController {
         }
         userService.updateUser(user);
         return "user/accountData";
+        // TODO: change the password update - its insecure to give hashed password to model, user can get info what algorithm we use to encode
     }
 
     @RequestMapping("/data")
@@ -121,13 +122,12 @@ public class UserController {
         model.addAttribute("userPassedClasses", userLessonsPassed);
         return "user/classes";
 
+
     }
 
     @GetMapping("/buy")
     public String buyForm(Model model) {
-
         model.addAttribute("carnetDto", new CarnetDto());
-
         return "user/buyCarnet";
     }
 

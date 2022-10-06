@@ -32,7 +32,6 @@ public class LessonService {
         this.userRepository = userRepository;
         this.carnetRepository = carnetRepository;
         this.carnetService = carnetService;
-
     }
 
     @Transactional
@@ -60,12 +59,9 @@ public class LessonService {
                 }
             }
         }
-
-
         activeLessons.forEach(lesson -> lesson.setState("started"));
         activeLessons.forEach(this::update);
         logger.log(Level.INFO, "Zaktualizowano status nadchodzących zajęć w ilości  " + activeLessons.size());
-
     }
 
     public boolean LessonBegins(Lesson lesson) {
@@ -130,4 +126,6 @@ public class LessonService {
     public void saveLesson (Lesson lesson) {
         lessonRepository.saveAndFlush(lesson);
     }
+
+
 }
