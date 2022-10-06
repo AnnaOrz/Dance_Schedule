@@ -8,15 +8,20 @@
 <html>
 <head>
     <title>DanceSchedule</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%@ include file="include.jsp" %>
 </head>
 <body>
-
-<sec:authorize access="hasAuthority('ADMIN')">
-    <%@ include file="./admin/menu.jsp" %>
-</sec:authorize>
-
 <%@ include file="fragments/topMenu.jsp" %>
+<h1 class="bg-dark text-light text-center">Aplikacja DanceSchedule </h1>
+
+
+<%--<sec:authorize access="hasAuthority('ADMIN')">
+    <%@ include file="./admin/menu.jsp" %>
+</sec:authorize>--%>
+
+
 
 
 <sec:authorize access="isAuthenticated()">
@@ -24,7 +29,7 @@
     <%@ include file="fragments/userMenu.jsp" %>
 </sec:authorize>
 
-<h1 class="alert-dark">Aplikacja DanceSchedule </h1>
+
 
 </body>
 </html>

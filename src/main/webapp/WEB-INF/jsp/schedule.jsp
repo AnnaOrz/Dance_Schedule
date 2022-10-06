@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>Grafik zajęć</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="include.jsp" %>
 </head>
 
 <body>
@@ -19,9 +19,9 @@
     <%@ include file="fragments/topMenu.jsp" %>
 </sec:authorize>
 
-<sec:authorize access="hasAuthority('ROLE_ADMIN')">
+<%--<sec:authorize access="hasAuthority('ROLE_ADMIN')">
         <%@ include file="./admin/menu.jsp" %>
-</sec:authorize>
+</sec:authorize>--%>
 
 <div class="message">${message.toString()} </div>
 

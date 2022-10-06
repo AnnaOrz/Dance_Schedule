@@ -3,6 +3,7 @@
 <html>
 <head>
     <title>Kontakt</title>
+    <%@ include file="include.jsp" %>
 </head>
 <body>
 <%@ include file="fragments/topMenu.jsp" %>

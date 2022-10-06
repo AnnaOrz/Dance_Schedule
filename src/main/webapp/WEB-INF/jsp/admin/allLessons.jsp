@@ -4,7 +4,7 @@
 <html>
 <head>
     <title>Zajęcia</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="../include.jsp" %>
 </head>
 
 <body>

@@ -1,32 +1,3 @@
-@charset "UTF-8";
-
-:root {
-    --bs-blue: #0d6efd;
-    --bs-indigo: #6610f2;
-    --bs-purple: #6f42c1;
-    --bs-pink: #d63384;
-    --bs-red: #dc3545;
-    --bs-orange: #fd7e14;
-    --bs-yellow: #ffc107;
-    --bs-green: #198754;
-    --bs-teal: #20c997;
-    --bs-cyan: #0dcaf0;
-    --bs-white: #fff;
-    --bs-gray: #6c757d;
-    --bs-gray-dark: #343a40;
-    --bs-primary: #0d6efd;
-    --bs-secondary: #6c757d;
-    --bs-success: #198754;
-    --bs-info: #0dcaf0;
-    --bs-warning: #ffc107;
-    --bs-danger: #dc3545;
-    --bs-light: #f8f9fa;
-    --bs-dark: #212529;
-    --bs-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    --bs-font-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --bs-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0));
-}
-
 body {
     margin: 0;
     font-family: var(--bs-font-sans-serif);
@@ -34,83 +5,20 @@ body {
     font-weight: 400;
     line-height: 1.5;
     color: #212529;
-    background: rgb(179,54,190);
-    background: radial-gradient(circle, rgba(179,54,190,0.5) 0%, rgba(182,17,214,0.5) 17%, rgba(87,99,212,0.5) 87%, rgba(148,187,233,0.5) 100%);
+    background-color: #270b3b;
+    background-image: linear-gradient(0deg, #270b3b 15%, #1059de 50%, #270b3b 85%);
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-    /*background-image: url("images/dancingWoman.jpg");*/
     background-blend-mode: normal;
-
-}
-.topMenu div {
-    text-align: center;
-    padding: 20px
 }
 
-.topMenu li {
-    display: inline;
-    background-color: white;
-    position: sticky;
-    border: 1px solid slateblue;
 
-}
-.topMenu li a {
-    color: black;
-    padding: 16px;
-    text-align: center;
-    text-decoration: none;
-    font-family: serif;
-    font-size: 150%;
-}
-h1 {
-    text-align: center;
-    padding: 20px
+.navbar-expand .navbar-nav .nav-link {
+    padding-right: 1.5rem;
+    padding-left: 1.5rem;
 }
 
-.schedule table {
-    font-family: "Courier New", Courier, monospace;
-    border: 4px solid #000000;
-    background-color: #555555;
-    text-align: center;
-    border-collapse: collapse;
-}
-.adminMenu div {
-    position: absolute;
-    right: 0;
-    padding: 10px 30px 10px 10px;
-
-}
-.adminMenu li {
-    display: block;
-    background-color: white;
-    position: sticky;
-    border: 1px solid slateblue;
-    align-content: center;
-
-}
-.adminMenu li a {
-    color: black;
-    padding: 16px;
-    text-align: center;
-    text-decoration: none;
-    font-family: serif;
-    font-size: 150%;
-}
- div.schedule-search {
-    padding: 10px;
-    text-align: center;
-
-}
- table.table-basic {
-     font-family: "Courier New", Courier, monospace;
-     border: 4px solid #000000;
-     background-color: whitesmoke;
-     width: auto;
-     text-align: center;
-     border-collapse: collapse;
- }
- table.table-basic th, td {
-     border: 2px solid #555555;
-     padding: 20px 5px;
- }
+/*violet version
+background-color: #5e198d;
+background-image: linear-gradient(0deg, #5e198d 15%, #2B86C5 50%, #5e198d 85%);*/
 

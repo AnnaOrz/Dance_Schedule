@@ -5,10 +5,9 @@
 <html>
 
 <body>
-<nav class="navbar topMenu">
+<nav class="navbar navbar-nav navbar-dark bg-dark">
     <div>
         <a  href="<c:url value="/"/>">Strona główna</a>
-
         <div >
             <ul>
                 <li class="nav-item">

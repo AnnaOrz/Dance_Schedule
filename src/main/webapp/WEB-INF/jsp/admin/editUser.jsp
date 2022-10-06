@@ -6,7 +6,7 @@
 <html>
 <head>
     <title>Edycja użytkownika</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="../include.jsp" %>
 </head>
 <body>
 

@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Edycja lekcji</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="../include.jsp" %>
 </head>
 <body>
 <h1> Edycja lekcji </h1>

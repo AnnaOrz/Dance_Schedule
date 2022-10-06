@@ -7,7 +7,7 @@
 <html>
 <head>
     <title>Utwórz lekcję</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="../include.jsp" %>
 </head>
 <body>
 <h2>Dodanie nowej lekcji</h2>

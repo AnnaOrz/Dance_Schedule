@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Edycja typu karnetu</title>
-    <link href='<c:url value="/style.css"/>' rel="stylesheet" type="text/css">
+    <%@ include file="../include.jsp" %>
 </head>
 <body>
 <h1> Edycja typu karnetu </h1>
